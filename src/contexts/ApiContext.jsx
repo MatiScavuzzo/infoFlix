@@ -55,7 +55,7 @@ export const ApiContextProvider = ({ children }) => {
     setMoviePage(ev.target.value)
   }
   const onChangeHandler = (ev) => {
-    if (ev.target.value.length > 3) {
+    if (ev.target.value.length > 2) {
       setQueryMovie(ev.target.value)
     }
     if (ev.target.value === '') {
