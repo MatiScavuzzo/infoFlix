@@ -62,6 +62,7 @@ export const MovieDetail = () => {
                   <div className='flex flex-col'>
                     <h3>Proveedores disponibles:</h3>
                     <p>No tenemos información de proveedores para mostrar</p>
+                    <p>Sólo en cines</p>
                   </div>
                 ) : (
                   <div className='flex flex-col items-center p-2'>

@@ -13,7 +13,7 @@ export const ApiContextProvider = ({ children }) => {
   const [moviePage, setMoviePage] = useState(initialPage)
   const [seriesPage, setSeriesPage] = useState(initialPage)
   const [trendingPeriod, setTrendingPeriod] = useState('day')
-  const [sortBy, setSortBy] = useState('popularity.desc')
+  const [sortBy, setSortBy] = useState({ value: 'popularity.desc'})
   const [movieData, setMovieData] = useState([])
   const [moviesProviders, setMoviesProviders] = useState()
   const [seriesData, setSeriesData] = useState([])
@@ -22,9 +22,12 @@ export const ApiContextProvider = ({ children }) => {
   const [trendingProviders, setTrendingProviders] = useState()
   const [queryMovie, setQueryMovie] = useState('')
   const [findMovies, setFindMovies] = useState([])
+  const [genresList, setGenresList] = useState([])
+  const [checkedList, setCheckedList] = useState([])
+  const byGenres = checkedList.toString()
   const API_KEY = 'api_key=ec755b7b2f3cf064edd7cd1219ddcf08'
   const API_URL = 'https://api.themoviedb.org/3/'
-  const DISCOVER_ALLMOVIES = `${API_URL}discover/movie?${API_KEY}&language=en-US&sort_by=${sortBy}&page=${moviePage}&vote_count.gte=500`
+  const DISCOVER_ALLMOVIES = `${API_URL}discover/movie?${API_KEY}&language=en-US&sort_by=${sortBy.value}&page=${moviePage}&with_genres=${byGenres}&vote_count.gte=500`
   const DISCOVER_MOVIE = `${API_URL}discover/movie?${API_KEY}&language=en-US&sort_by=popularity.desc&vote_count.gte=500`
   const DISCOVER_TVSERIES = `${API_URL}discover/tv?${API_KEY}&sort_by=popularity.desc&vote_count.gte=500`
   const DISCOVER_ALLTVSERIES = `${API_URL}discover/tv?${API_KEY}&language=en-US&sort_by=${sortBy}&page=${seriesPage}&vote_count.gte=500`
@@ -62,15 +65,35 @@ export const ApiContextProvider = ({ children }) => {
       setQueryMovie('')
       setFindMovies([])
     }
-    if (queryMovie === '') {
-      setFindMovies([])
-    }
   }
+  const onChangeSortByHandler = (ev) => {
+    console.log(sortBy)
+    setAllMovies([])
+    return setSortBy({value: ev.target.value});
+  }
+  const handlerSelect = (ev) => {
+    const value = ev.target.value
+    const isChecked = ev.target.checked
+    const filteredList = checkedList.filter(item => item !== value)
+    if (isChecked) {
+      setCheckedList([...checkedList, value])
+      setAllMovies([])
+    } else {
+      setCheckedList(filteredList)
+      setAllMovies([])
+    }
+    isChecked ? setCheckedList([...checkedList, value]) : setCheckedList(filteredList)
+  }
+  useEffect(() => {
+    fetch(`${API_URL}genre/movie/list?${API_KEY}&language=es-AR`)
+    .then(res => res.json())
+    .then(resGenres => setGenresList(resGenres.genres))
+  }, [])
   useEffect(() => {
     fetch(`${DISCOVER_ALLMOVIES}`)
     .then(res => res.json())
-    .then(resAllMovies => setAllMovies(allMovies.concat(resAllMovies.results)))
-  }, [DISCOVER_ALLMOVIES, moviePage])
+    .then(resAllMovies => {allMovies === [] ? setAllMovies(resAllMovies.results) : setAllMovies(allMovies.concat(resAllMovies.results))})
+  }, [DISCOVER_ALLMOVIES])
   useEffect(() => {
     fetch(`${API_URL}search/movie?${API_KEY}&language=en-US&query=${queryMovie}`)
     .then(res => res.json())
@@ -132,7 +155,12 @@ export const ApiContextProvider = ({ children }) => {
         trendingProviders,
         setTrendingProviders,
         onChangeHandler,
-        findMovies
+        findMovies,
+        onChangeSortByHandler,
+        genresList,
+        handlerSelect,
+        checkedList,
+        byGenres
       }}>
       {children}
     </ApiContext.Provider>
