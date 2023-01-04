@@ -1,10 +1,7 @@
-import { useContext } from 'react'
-import { ApiContext } from '../contexts/ApiContext'
 import { Spinner } from './Spinner'
 
 
-export const FilterByCategories = ({className}) => {
-  const {genresList, handlerSelect} = useContext(ApiContext)
+export const FilterByCategories = ({className, genresList, onChange}) => {
   return (
     <div className={className}>
       <div className='pb-2'>
@@ -17,9 +14,9 @@ export const FilterByCategories = ({className}) => {
           type='checkbox'
           name='categories'
           value={g.id}
-          onChange={handlerSelect}
+          onChange={onChange}
           />
-          <label>{g.name}</label>
+          <label className='p-1'>{g.name}</label>
         </div>)}
       </div>
     </div>

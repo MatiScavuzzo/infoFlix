@@ -23,6 +23,7 @@ export const ApiContextProvider = ({ children }) => {
   const [queryMovie, setQueryMovie] = useState('')
   const [findMovies, setFindMovies] = useState([])
   const [genresList, setGenresList] = useState([])
+  const [genresTVList, setGenresTVList] = useState([])
   const [checkedList, setCheckedList] = useState([])
   const byGenres = checkedList.toString()
   const API_KEY = 'api_key=ec755b7b2f3cf064edd7cd1219ddcf08'
@@ -84,10 +85,28 @@ export const ApiContextProvider = ({ children }) => {
     }
     isChecked ? setCheckedList([...checkedList, value]) : setCheckedList(filteredList)
   }
+  const handlerSeriesSelect = (ev) => {
+    const value = ev.target.value
+    const isChecked = ev.target.checked
+    const filteredList = checkedList.filter(item => item !== value)
+    if (isChecked) {
+      setCheckedList([...checkedList, value])
+      setAllTvSeries([])
+    } else {
+      setCheckedList(filteredList)
+      setAllTvSeries([])
+    }
+    isChecked ? setCheckedList([...checkedList, value]) : setCheckedList(filteredList)
+  }
   useEffect(() => {
     fetch(`${API_URL}genre/movie/list?${API_KEY}&language=es-AR`)
     .then(res => res.json())
     .then(resGenres => setGenresList(resGenres.genres))
+  }, [])
+  useEffect(() => {
+    fetch(`${API_URL}genre/tv/list?${API_KEY}&language=es-AR`)
+    .then(res => res.json())
+    .then(resGenres => setGenresTVList(resGenres.genres))
   }, [])
   useEffect(() => {
     fetch(`${DISCOVER_ALLMOVIES}`)
@@ -160,7 +179,9 @@ export const ApiContextProvider = ({ children }) => {
         genresList,
         handlerSelect,
         checkedList,
-        byGenres
+        byGenres,
+        handlerSeriesSelect,
+        genresTVList
       }}>
       {children}
     </ApiContext.Provider>
