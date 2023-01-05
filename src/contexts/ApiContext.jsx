@@ -21,7 +21,9 @@ export const ApiContextProvider = ({ children }) => {
   const [trendingData, setTrendingData] = useState([])
   const [trendingProviders, setTrendingProviders] = useState()
   const [queryMovie, setQueryMovie] = useState('')
+  const [querySeries, setQuerySeries] = useState('')
   const [findMovies, setFindMovies] = useState([])
+  const [findSeries, setFindSeries] = useState([])
   const [genresList, setGenresList] = useState([])
   const [genresTVList, setGenresTVList] = useState([])
   const [checkedList, setCheckedList] = useState([])
@@ -37,7 +39,7 @@ export const ApiContextProvider = ({ children }) => {
   const dayOrWeekHandler = (ev) => {
     setTrendingPeriod(ev.target.value)
   }
-  const showMoreMoviesHandler = () => {
+  const showMoreMoviesHandler = () => { 
     setMoviePage(moviePage+1)
     setButtonShowLess(true)
   }
@@ -65,11 +67,13 @@ export const ApiContextProvider = ({ children }) => {
     if (ev.target.value === '') {
       setQueryMovie('')
       setFindMovies([])
+      setFindSeries([])
     }
   }
   const onChangeSortByHandler = (ev) => {
     console.log(sortBy)
     setAllMovies([])
+    setAllTvSeries([])
     return setSortBy({value: ev.target.value});
   }
   const handlerSelect = (ev) => {
@@ -111,13 +115,18 @@ export const ApiContextProvider = ({ children }) => {
   useEffect(() => {
     fetch(`${DISCOVER_ALLMOVIES}`)
     .then(res => res.json())
-    .then(resAllMovies => {allMovies === [] ? setAllMovies(resAllMovies.results) : setAllMovies(allMovies.concat(resAllMovies.results))})
+    .then(resAllMovies => {allMovies == [] ? setAllMovies(resAllMovies.results) : setAllMovies(allMovies.concat(resAllMovies.results))})
   }, [DISCOVER_ALLMOVIES])
   useEffect(() => {
     fetch(`${API_URL}search/movie?${API_KEY}&language=en-US&query=${queryMovie}`)
     .then(res => res.json())
     .then(resQueryMovies => setFindMovies(resQueryMovies.results))
   }, [queryMovie])
+  useEffect(() => {
+    fetch(`${API_URL}search/tv?${API_KEY}&language=en-US&query=${querySeries}`)
+    .then(res => res.json())
+    .then(resQuerySeries => setFindSeries(resQuerySeries.results))
+  }, [querySeries])
   useEffect(() => {
     fetch(`${DISCOVER_MOVIE}`)
     .then(response => response.json())
