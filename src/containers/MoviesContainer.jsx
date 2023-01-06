@@ -18,12 +18,12 @@ export const MoviesContainer = () => {
     IMG_URL } = useContext(ApiContext)
   return (
     <div className='flex flex-col'>
-      <div className='flex p-4 gap-2 items-center justify-around'>
+      <div className='flex flex-col p-4 gap-4 md:flex-row items-center justify-around'>
         <input type='search' className='rounded-lg p-1' onChange={onChangeHandler} placeholder='Buscar...' />
         <SortBySelector onChange={onChangeSortByHandler} className='rounded-lg p-1' />
       </div>
       <div className='flex w-full gap-2 items-center justify-center'>
-        <FilterByCategories genresList={genresList} onChange={handlerSelect} className='rounded-lg p-1 flex flex-col' />
+        <FilterByCategories genresList={genresList} onChange={handlerSelect} className='relative w-40 rounded-lg p-1 flex flex-col' />
       </div>
       <div className='flex flex-wrap p-2 w-full'>
         {!allMovies ? 
