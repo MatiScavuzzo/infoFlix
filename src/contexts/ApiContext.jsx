@@ -27,6 +27,7 @@ export const ApiContextProvider = ({ children }) => {
   const [querySeries, setQuerySeries] = useState('')
   const [findSeries, setFindSeries] = useState([])
   const [checkedSeriesList, setCheckedSeriesList] = useState([])
+  const byGenresSeries = checkedSeriesList.toString()
   const [genresTVList, setGenresTVList] = useState([]) // Hasta acá estados para series
   const [trendingPeriod, setTrendingPeriod] = useState('day') // Estado de tendencias 
   const API_KEY = 'api_key=ec755b7b2f3cf064edd7cd1219ddcf08'
@@ -34,7 +35,7 @@ export const ApiContextProvider = ({ children }) => {
   const DISCOVER_ALLMOVIES = `${API_URL}discover/movie?${API_KEY}&language=en-US&sort_by=${sortBy.value}&page=${moviePage}&with_genres=${byGenres}&vote_count.gte=500`
   const DISCOVER_MOVIE = `${API_URL}discover/movie?${API_KEY}&language=en-US&sort_by=popularity.desc&vote_count.gte=500`
   const DISCOVER_TVSERIES = `${API_URL}discover/tv?${API_KEY}&sort_by=popularity.desc&vote_count.gte=500`
-  const DISCOVER_ALLTVSERIES = `${API_URL}discover/tv?${API_KEY}&language=en-US&sort_by=${sortBy.value}&page=${seriesPage}&with_genres=${byGenres}&vote_count.gte=500`
+  const DISCOVER_ALLTVSERIES = `${API_URL}discover/tv?${API_KEY}&language=en-US&sort_by=${sortBy.value}&page=${seriesPage}&with_genres=${byGenresSeries}&vote_count.gte=500`
   const TRENDING = `${API_URL}trending/all/${trendingPeriod}?${API_KEY}`
   const IMG_URL = 'https://image.tmdb.org/t/p/'
   const dayOrWeekHandler = (ev) => {
@@ -93,14 +94,10 @@ export const ApiContextProvider = ({ children }) => {
   } // Selector Categorías Movies
   const handlerSeriesSelect = (ev) => {
     const value = ev.target.value
-    console.log(value);
     const isChecked = ev.target.checked
-    console.log(isChecked);
     const filteredList = checkedSeriesList.filter(item => item !== value)
     if (isChecked) {
       setCheckedSeriesList([...checkedSeriesList, value])
-      console.log(checkedSeriesList);
-      console.log(byGenres);
       setAllTvSeries([])
     } else {
       setCheckedSeriesList(filteredList)
@@ -194,7 +191,6 @@ export const ApiContextProvider = ({ children }) => {
         genresList,
         handlerSelect,
         checkedList,
-        byGenres,
         handlerSeriesSelect,
         genresTVList,
         findSeries

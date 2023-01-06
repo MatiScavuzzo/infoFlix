@@ -1,8 +1,8 @@
 import { Spinner } from './Spinner'
 import { DropdownGenres } from './DropdownGenres'
 import { useState } from 'react'
-import { FaChevronDown } from 'react-icons/fa'
-import { MdOutlineClose } from 'react-icons/md'
+import { HiOutlineChevronDown } from 'react-icons/hi'
+import { HiOutlineX } from 'react-icons/hi'
 
 
 export const FilterByCategories = ({className, genresList, onChange}) => {
@@ -12,17 +12,17 @@ export const FilterByCategories = ({className, genresList, onChange}) => {
   }
   return (
     <div className={className}>
-      <div className='pb-2 flex'>
+      <div className='pb-2 flex items-center justify-center'>
         <h3 className='p-1'>Categorías</h3>
-        <button className='p-1' onClick={showGenresHandler}>{showGenres === false ? <FaChevronDown /> : <MdOutlineClose/>}</button>
+        <button className='p-1' onClick={showGenresHandler}>{showGenres === false ? <HiOutlineChevronDown /> : <HiOutlineX/>}</button>
       </div>
-      <div className={`${showGenres === false ? 'hidden' : ''} w-full bg-black top-10 p-2 border border-slate-300 left-0 h-40 overflow-auto absolute`}>
+      <div className={`${showGenres === false ? 'hidden' : ''} w-full bg-black rounded-md scroll-m-1 top-10 p-1 border border-slate-300 left-0 h-40 overflow-auto absolute`}>
         <DropdownGenres className='flex flex-col w-full items-start justify-start rounded-lg p-1'>
           {!genresList ? (
             <Spinner />
           ) : (
             genresList.map((g) => (
-              <li onChange={onChange} className='p-1' key={g.id}>
+              <li onChange={onChange} key={g.id}>
                 <label className='flex gap-2'>
                   <input
                     type='checkbox'

@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import Button from '../components/Button'
 import { MediaCard } from '../components/MediaCard'
+import { Spinner } from '../components/Spinner'
 import { ApiContext } from '../contexts/ApiContext'
 
 export const TrendingContainer = () => {
@@ -15,7 +16,7 @@ export const TrendingContainer = () => {
         </div>
       </div>
       <div className='flex flex-wrap p-2 w-full'>
-        {!trending ? <h1>Cargando...</h1> : trending.map(t => <MediaCard linkTo={t.media_type === 'movie' ? `/movies/${t.id}` : `/series/${t.id}`} key={t.id} id={t.id} title={t.title || t.name} imgSrc={`${IMG_URL}w185${t.poster_path}`}/>)}
+        {!trending ? <Spinner /> : trending.map(t => <MediaCard linkTo={t.media_type === 'movie' ? `/movies/${t.id}` : `/series/${t.id}`} key={t.id} id={t.id} title={t.title || t.name} imgSrc={`${IMG_URL}w185${t.poster_path}`}/>)}
       </div>
     </div>
   )

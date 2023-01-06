@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { Spinner } from '../components/Spinner'
 import { ApiContext } from '../contexts/ApiContext'
 
 export const SeriesDetail = () => {
@@ -18,7 +19,7 @@ export const SeriesDetail = () => {
   return (
     <>
       {seriesData.length === 0 ? (
-        <h1>Cargando...</h1>
+        <Spinner />
       ) : (
         <div>
           <div className='flex items-start px-1 pt-2'>
@@ -51,7 +52,7 @@ export const SeriesDetail = () => {
                     </li>)}
                   </ul>
                 </div>
-                <p className='p-1'>Géneros: {!seriesData ? <span>Cargando...</span> : seriesData.genres.map(g => <span key={g.id}> | {g.name} | </span>)} </p>
+                <p className='p-1'>Géneros: {!seriesData ? <Spinner /> : seriesData.genres.map(g => <span key={g.id}> | {g.name} | </span>)} </p>
                 <p className='p-1'>Fecha de lanzamiento: {seriesData.first_air_date}</p>
               </div>
               <div className='flex flex-wrap items-center justify-center gap-2'>
@@ -64,7 +65,7 @@ export const SeriesDetail = () => {
               <div className='flex flex-col'>
                 <h3>Producción</h3>
                 <div className='flex p-2 gap-2 items-center justify-center flex-wrap'>
-                  {!seriesData ? <span>Cargando...</span> : seriesData.production_companies.map(pc => 
+                  {!seriesData ? <Spinner /> : seriesData.production_companies.map(pc => 
                     <div key={pc.id} className='flex bg-slate-400 p-1 rounded-md flex-wrap h-20 text-black flex-col gap-2 items-center justify-center'>
                       <img 
                         className='w-4/5'

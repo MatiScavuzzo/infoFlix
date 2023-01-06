@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { Spinner } from '../components/Spinner'
 import { ApiContext } from '../contexts/ApiContext'
 
 export const MovieDetail = () => {
@@ -18,7 +19,7 @@ export const MovieDetail = () => {
   return (
     <>
       {movieData.length === 0 ? (
-        <h1>Cargando...</h1>
+        <Spinner />
       ) : (
         <div>
           <div className='flex items-start px-1 pt-2'>
@@ -42,13 +43,13 @@ export const MovieDetail = () => {
                 <p className='p-1'>{movieData.overview}</p>
                 <p className='p-1'>Tagline: "{movieData.tagline}"</p>
                 <p className='p-1'>Duración: {movieData.runtime} minutos.</p>
-                <p className='p-1'>Géneros: {!movieData ? <span>Cargando...</span> : movieData.genres.map(g => <span key={g.id}> | {g.name} | </span>)} </p>
+                <p className='p-1'>Géneros: {!movieData ? <Spinner /> : movieData.genres.map(g => <span key={g.id}> | {g.name} | </span>)} </p>
                 <p className='p-1'>Fecha de lanzamiento: {movieData.release_date}</p>
               </div>
               <div className='flex flex-col'>
                 <h3>Producción</h3>
                 <div className='flex p-2 gap-2 items-center justify-center'>
-                  {!movieData ? <span>Cargando...</span> : movieData.production_companies.map(pc => 
+                  {!movieData ? <Spinner /> : movieData.production_companies.map(pc => 
                     <div key={pc.id} className='flex bg-slate-400 p-1 rounded-md flex-wrap h-20 text-black flex-col gap-2 items-center justify-center'>
                       <img 
                         className='w-4/5'
