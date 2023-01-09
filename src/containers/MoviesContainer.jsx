@@ -6,6 +6,7 @@ import { MediaCard } from '../components/MediaCard'
 import { SortBySelector } from '../components/SortBySelector'
 import { Spinner } from '../components/Spinner'
 import { ApiContext } from '../contexts/ApiContext'
+import { ThemeContext } from '../contexts/ThemeContext'
 import { PaginationContainer } from './PaginationContainer'
 
 export const MoviesContainer = () => {
@@ -20,8 +21,9 @@ export const MoviesContainer = () => {
     findMovies, 
     allMovies, 
     IMG_URL } = useContext(ApiContext)
+    const { darkMode } = useContext(ThemeContext)
   return (
-    <div className='flex flex-col relative'>
+    <div className={`${darkMode === true ? 'dark' : 'light'} flex flex-col relative`}>
       <div className='absolute top-4 left-2'>
         <button className={`${isScrolled} bg-slate-500 fixed z-20 rounded-full`}><Link to='/'><HiHome className='p-2 w-10 h-10'/></Link></button>
       </div>

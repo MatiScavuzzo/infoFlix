@@ -5,12 +5,14 @@ import { BtnMenuMovil } from './BtnMenuMovil'
 import { Logo } from './Logo'
 import { HiOutlineArrowTrendingUp, HiOutlineFilm, HiOutlineSparkles } from 'react-icons/hi2'
 import { HiLogin, HiLogout } from 'react-icons/hi'
+import { BtnTheme } from './BtnTheme'
 
 export const Navbar = ({className}) => {
   const { isOpen, isLogIn, tabHandler, selectedTabFilm, selectedTabSeries, selectedTabTrending, isOpenHandler } = useContext(ApiContext)
   return (
     <nav className={className}>
       <Link to='/'className='w-3/5' ><Logo className='w-full lg:w-5/6 p-2' /></Link>
+      <BtnTheme />
       <BtnMenuMovil className='flex lg:hidden items-center justify-center' onClick={isOpenHandler} />
       <ul className={`${isOpen === false ? 'hidden lg:flex' : 'absolute flex flex-col md:top-36 top-20 items-end justify-around right-4 h-auto p-4 bg-black border-4 border-red-600 border-opacity-30 opacity-80 z-10 rounded-lg'} lg:w-3/5 lg:items-center lg:justify-around`}>
         <Link to='/movies'><li className='font-black p-1 flex'><button value='films' onClick={tabHandler} className={`${selectedTabFilm} flex justify-center items-center gap-2`}>Peliculas <HiOutlineFilm className={`underline w-6 h-6`} /></button></li></Link>
