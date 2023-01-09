@@ -13,10 +13,11 @@ export const FilterByCategories = ({className, genresList, onChange}) => {
   return (
     <div className={className}>
       <div className='pb-2 flex items-center justify-center'>
+        <button className='p-2 flex items-center justify-center' onClick={showGenresHandler}>
         <h3 className='p-1'>Categorías</h3>
-        <button className='p-1' onClick={showGenresHandler}>{showGenres === false ? <HiOutlineChevronDown /> : <HiOutlineX/>}</button>
+        {showGenres === false ? <HiOutlineChevronDown /> : <HiOutlineX/>}</button>
       </div>
-      <div className={`${showGenres === false ? 'hidden' : ''} w-full bg-black rounded-md scroll-m-1 top-10 p-1 border border-slate-300 left-0 h-40 overflow-auto absolute`}>
+      <div className={`${showGenres === false ? 'hidden' : ''} w-full bg-black rounded-md scroll-m-1 top-14 p-1 border border-slate-300 left-0 h-40 overflow-auto absolute`}>
         <DropdownGenres className='flex flex-col w-full items-start justify-start rounded-lg p-1'>
           {!genresList ? (
             <Spinner />

@@ -29,7 +29,13 @@ export const ApiContextProvider = ({ children }) => {
   const [checkedSeriesList, setCheckedSeriesList] = useState([])
   const byGenresSeries = checkedSeriesList.toString()
   const [genresTVList, setGenresTVList] = useState([]) // Hasta acá estados para series
-  const [trendingPeriod, setTrendingPeriod] = useState('day') // Estado de tendencias 
+  const [trendingPeriod, setTrendingPeriod] = useState('day') // Estado de tendencias
+  const [isOpen, setIsOpen] = useState(false)
+  const [isLogIn, setIsLogIn] = useState(false)
+  const [selectedTabFilm, setSelectedTabFilm] = useState('')
+  const [selectedTabSeries, setSelectedTabSeries] = useState('')
+  const [selectedTabTrending, setSelectedTabTrending] = useState('')
+  const [isScrolled, setIsScrolled] = useState('')
   const API_KEY = 'api_key=ec755b7b2f3cf064edd7cd1219ddcf08'
   const API_URL = 'https://api.themoviedb.org/3/'
   const DISCOVER_ALLMOVIES = `${API_URL}discover/movie?${API_KEY}&language=en-US&sort_by=${sortBy.value}&page=${moviePage}&with_genres=${byGenres}&vote_count.gte=500`
@@ -38,6 +44,8 @@ export const ApiContextProvider = ({ children }) => {
   const DISCOVER_ALLTVSERIES = `${API_URL}discover/tv?${API_KEY}&language=en-US&sort_by=${sortBy.value}&page=${seriesPage}&with_genres=${byGenresSeries}&vote_count.gte=500`
   const TRENDING = `${API_URL}trending/all/${trendingPeriod}?${API_KEY}`
   const IMG_URL = 'https://image.tmdb.org/t/p/'
+
+
   const dayOrWeekHandler = (ev) => {
     setTrendingPeriod(ev.target.value)
   } // Tendencias
@@ -105,6 +113,59 @@ export const ApiContextProvider = ({ children }) => {
     }
     isChecked ? setCheckedSeriesList([...checkedSeriesList, value]) : setCheckedSeriesList(filteredList)
   } // Selector Categorías Series
+  const isOpenHandler = () => {
+    setIsOpen(!isOpen)
+  }
+  const isLogInHandler = () => {
+    setIsLogIn(!isLogIn)
+  }
+  const tabHandler = (ev) => {
+    switch (ev.target.value) {
+      case 'films':
+        setSelectedTabFilm('underline decoration-4 underline-offset-4 decoration-red-600/60 md:decoration-white')
+        setSelectedTabSeries('')
+        setSelectedTabTrending('')
+        break;
+      case 'series':
+        setSelectedTabFilm('')
+        setSelectedTabSeries('underline decoration-4 underline-offset-4 decoration-red-600/60 md:decoration-white')
+        setSelectedTabTrending('')
+        break;
+      case 'trending':
+        setSelectedTabFilm('')
+        setSelectedTabSeries('')
+        setSelectedTabTrending('underline decoration-4 underline-offset-4 decoration-red-600/60 md:decoration-white')
+        break
+      default: 
+        setSelectedTabFilm('')
+        setSelectedTabSeries('')
+        setSelectedTabTrending('')
+        break;
+    }
+  }
+  
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY>50 && window.scrollY<90) {
+        setIsScrolled('opacity-50')
+      } else if (window.scrollY>=90 && window.scrollY<140) {
+        setIsScrolled('opacity-40')
+      } else if (window.scrollY>=140 && window.scrollY<150) {
+        setIsScrolled('opacity-30')
+      } else if (window.scrollY>=150) {
+        setIsScrolled('hidden')
+      } else {
+        setIsScrolled('')
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [])
   useEffect(() => {
     fetch(`${API_URL}genre/movie/list?${API_KEY}&language=es-AR`)
     .then(res => res.json())
@@ -160,40 +221,48 @@ export const ApiContextProvider = ({ children }) => {
       {
         movies,
         allMovies,
+        movieData,
+        moviesProviders,
+        findMovies,
+        genresList,
+        checkedList,
         tvSeries,
         allTvSeries,
+        seriesData,
+        seriesProviders,
+        genresTVList,
+        findSeries,
         trending,
+        trendingData,
+        trendingProviders,
         API_URL,
         API_KEY,
         IMG_URL,
         buttonShowLess,
+        isOpen,
+        isLogIn,
+        selectedTabFilm,
+        selectedTabSeries,
+        selectedTabTrending,
+        isScrolled,
         dayOrWeekHandler,
         showMoreMoviesHandler,
         showLessMoviesHandler,
         showMoreSeriesHandler,
         showLessSeriesHandler,
         numberPageHandler,
-        movieData,
         setMovieData,
-        moviesProviders,
         setMoviesProviders,
-        seriesData,
         setSeriesData,
-        seriesProviders,
         setSeriesProviders,
-        trendingData,
         setTrendingData,
-        trendingProviders,
         setTrendingProviders,
         onChangeHandler,
-        findMovies,
         onChangeSortByHandler,
-        genresList,
         handlerSelect,
-        checkedList,
         handlerSeriesSelect,
-        genresTVList,
-        findSeries
+        isOpenHandler,
+        tabHandler
       }}>
       {children}
     </ApiContext.Provider>
