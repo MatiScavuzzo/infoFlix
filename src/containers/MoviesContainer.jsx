@@ -23,7 +23,7 @@ export const MoviesContainer = () => {
     IMG_URL } = useContext(ApiContext)
     const { darkMode } = useContext(ThemeContext)
   return (
-    <div className={`${darkMode === true ? 'dark' : 'light'} flex flex-col relative`}>
+    <div className={`${darkMode ? 'dark' : 'light'} flex flex-col relative`}>
       <div className='absolute top-4 left-2'>
         <button className={`${isScrolled} bg-slate-500 fixed z-20 rounded-full`}><Link to='/'><HiHome className='p-2 w-10 h-10'/></Link></button>
       </div>
