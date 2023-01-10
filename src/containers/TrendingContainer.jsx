@@ -5,11 +5,13 @@ import Button from '../components/Button'
 import { MediaCard } from '../components/MediaCard'
 import { Spinner } from '../components/Spinner'
 import { ApiContext } from '../contexts/ApiContext'
+import { ThemeContext } from '../contexts/ThemeContext'
 
 export const TrendingContainer = () => {
+  const { darkMode } = useContext(ThemeContext)
   const { trending, isScrolled, IMG_URL, dayOrWeekHandler } = useContext(ApiContext)
   return (
-    <div className='flex flex-col gap-2 relative'>
+    <div className={`${darkMode ? 'dark' : 'light'} flex flex-col gap-2 relative`}>
       <div className='absolute top-4 left-2'>
         <button className={`${isScrolled} bg-slate-500 fixed z-20 rounded-full`}><Link to='/'><HiHome className='p-2 w-10 h-10'/></Link></button>
       </div>

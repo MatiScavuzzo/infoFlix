@@ -2,9 +2,11 @@ import { useContext, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Spinner } from '../components/Spinner'
 import { ApiContext } from '../contexts/ApiContext'
+import { ThemeContext } from '../contexts/ThemeContext'
 
 export const MovieDetail = () => {
   const { API_URL, API_KEY, movieData, setMovieData, IMG_URL, moviesProviders, setMoviesProviders } = useContext(ApiContext)
+  const { darkMode } = useContext(ThemeContext)
   const { movieId } = useParams()
   useEffect(() => {
     fetch(`${API_URL}movie/${movieId}?${API_KEY}&language=es-AR`)
@@ -21,7 +23,7 @@ export const MovieDetail = () => {
       {movieData.length === 0 ? (
         <Spinner />
       ) : (
-        <div>
+        <div className={`${darkMode ? 'dark' : 'light'}`}>
           <div className='flex items-start px-1 pt-2'>
             <span><Link className='px-1 hover:underline' to='/'>Home </Link></span><span>/</span><span><Link className='px-1 hover:underline' to='/movies'>Peliculas </Link></span><span>/</span><span className='underline'>{movieData.original_title}</span>
           </div>

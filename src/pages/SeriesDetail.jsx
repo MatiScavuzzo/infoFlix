@@ -2,8 +2,10 @@ import { useContext, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Spinner } from '../components/Spinner'
 import { ApiContext } from '../contexts/ApiContext'
+import { ThemeContext } from '../contexts/ThemeContext'
 
 export const SeriesDetail = () => {
+  const { darkMode } = useContext(ThemeContext)
   const { API_URL, API_KEY, seriesData, setSeriesData, IMG_URL, seriesProviders, setSeriesProviders } = useContext(ApiContext)
   const { serieId } = useParams()
   useEffect(() => {
@@ -21,7 +23,7 @@ export const SeriesDetail = () => {
       {seriesData.length === 0 ? (
         <Spinner />
       ) : (
-        <div>
+        <div className={`${darkMode ? 'dark' : 'light'}`}>
           <div className='flex items-start px-1 pt-2'>
             <span><Link className='px-1 hover:underline' to='/'>Home </Link></span><span>/</span><span><Link className='px-1 hover:underline' to='/series'>Series </Link></span><span>/</span><span className='underline'>{seriesData.original_name}</span>
           </div>

@@ -45,7 +45,7 @@ export const ApiContextProvider = ({ children }) => {
   const TRENDING = `${API_URL}trending/all/${trendingPeriod}?${API_KEY}`
   const IMG_URL = 'https://image.tmdb.org/t/p/'
 
-
+ 
   const dayOrWeekHandler = (ev) => {
     setTrendingPeriod(ev.target.value)
   } // Tendencias

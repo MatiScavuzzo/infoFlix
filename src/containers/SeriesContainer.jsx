@@ -7,11 +7,13 @@ import { FilterByCategories } from '../components/FilterByCategories'
 import { Spinner } from '../components/Spinner'
 import { Link } from 'react-router-dom'
 import { HiHome } from 'react-icons/hi'
+import { ThemeContext } from '../contexts/ThemeContext'
 
 export const SeriesContainer = () => {
+  const { darkMode } = useContext(ThemeContext)
   const { showMoreSeriesHandler, isScrolled, findSeries, handlerSeriesSelect, onChangeHandler, onChangeSortByHandler, genresTVList, showLessSeriesHandler,allTvSeries, IMG_URL } = useContext(ApiContext)
   return (
-    <div className='flex flex-col relative'>
+    <div className={`${darkMode ? 'dark' : 'light'} flex flex-col relative`}>
       <div className='absolute top-4 left-2'>
         <button className={`${isScrolled} bg-slate-500 fixed z-20 rounded-full`}><Link to='/'><HiHome className='p-2 w-10 h-10'/></Link></button>
       </div>
