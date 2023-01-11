@@ -15,11 +15,11 @@ export const SeriesContainer = () => {
   return (
     <div className={`${darkMode ? 'dark' : 'light'} flex flex-col relative`}>
       <div className='absolute top-4 left-2'>
-        <button className={`${isScrolled} bg-slate-500 fixed z-20 rounded-full`}><Link to='/'><HiHome className='p-2 w-10 h-10'/></Link></button>
+        <button className={`${isScrolled} ${darkMode ? '' : 'text-neutral-100 bg-red-700 border-2 border-neutral-700'} bg-slate-500 fixed z-20 rounded-full`}><Link to='/'><HiHome className='p-2 w-10 h-10'/></Link></button>
       </div>
       <div className='flex flex-col p-4 gap-4 md:flex-row items-center justify-around'>
-        <input type='search' className='rounded-lg p-1' onChange={onChangeHandler} placeholder='Buscar...' />
-        <SortBySelector onChange={onChangeSortByHandler} className='rounded-lg p-1' />
+        <input type='search' className={`${darkMode ? '' : 'border-2 text-neutral-100 border-neutral-700 bg-red-700 placeholder:text-neutral-100'} rounded-lg p-1`} onChange={onChangeHandler} placeholder='Buscar...' />
+        <SortBySelector onChange={onChangeSortByHandler} className={`${darkMode ? '' : 'text-neutral-100 border-2 border-neutral-700 bg-red-700'} rounded-lg p-1`} />
       </div>
       <div className='flex w-full gap-2 items-center justify-center'>
         <FilterByCategories genresList={genresTVList} onChange={handlerSeriesSelect} className='relative w-48 rounded-lg p-1 flex flex-col' />
