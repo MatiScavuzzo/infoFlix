@@ -8,10 +8,10 @@ import { HiLogin, HiLogout } from 'react-icons/hi'
 import { BtnTheme } from './BtnTheme'
 
 export const Navbar = ({className}) => {
-  const { isOpen, isLogIn, tabHandler, selectedTabFilm, selectedTabSeries, selectedTabTrending, isOpenHandler } = useContext(ApiContext)
+  const { isOpen, isLogIn, tabHandler, selectedTabFilm, toHomeHandler, selectedTabSeries, selectedTabTrending, isOpenHandler } = useContext(ApiContext)
   return (
     <nav className={className}>
-      <Link to='/'className='w-3/5' ><Logo className='w-full lg:w-5/6 p-2' /></Link>
+      <Link to='/'className='w-3/5' ><button onClick={toHomeHandler} className='w-full'><Logo className='w-full lg:w-5/6 p-2' /></button></Link>
       <div className='flex lg:flex-col lg:justify-between p-2 items-center justify-end gap-2 lg:items-end w-3/5'>
         <BtnTheme className='border w-1/10 rounded-lg border-slate-300 border-opacity-40 p-1 mr-2' />
         <BtnMenuMovil className='flex lg:hidden items-center justify-center' onClick={isOpenHandler} />
@@ -19,8 +19,8 @@ export const Navbar = ({className}) => {
           <Link to='/movies'><li className='font-black p-1 flex'><button value='films' onClick={tabHandler} className={`${selectedTabFilm} flex justify-center items-center gap-2`}>Peliculas <HiOutlineFilm className={`underline w-6 h-6`} /></button></li></Link>
           <Link to='/series'><li className='font-black p-1 flex'><button value='series' onClick={tabHandler} className={`${selectedTabSeries} flex justify-center items-center gap-2`}>Series <HiOutlineSparkles className='w-6 h-6' /></button></li></Link>
           <Link to= '/trending'><li className='font-black p-1 flex'><button value='trending' onClick={tabHandler} className={`${selectedTabTrending} flex justify-center items-center gap-2`}>Destacados <HiOutlineArrowTrendingUp className='w-6 h-6' /></button></li></Link>
-          <Link to= '/trending'><li className={`${isLogIn === false ? 'flex' : 'hidden'} font-black p-1`}><button className={`flex justify-center items-center gap-2`}>Registrarse / Iniciar sesión <HiLogin className='w-6 h-6' /></button> </li></Link>
-          <Link to= '/trending'><li className={`${isLogIn === true ? 'flex' : 'hidden'} font-black p-1`}><button className={`flex justify-center items-center gap-2`}>Cerrar sesión <HiLogout className='w-6 h-6' /></button> </li></Link>
+          <Link to= '/auth'><li className={`${isLogIn === false ? 'flex' : 'hidden'} font-black p-1`}><button className={`flex justify-center items-center gap-2`}>Registrarse / Iniciar sesión <HiLogin className='w-6 h-6' /></button> </li></Link>
+          <Link to= '/'><li className={`${isLogIn === true ? 'flex' : 'hidden'} font-black p-1`}><button className={`flex justify-center items-center gap-2`}>Cerrar sesión <HiLogout className='w-6 h-6' /></button> </li></Link>
         </ul>
       </div> 
     </nav>

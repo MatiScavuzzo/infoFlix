@@ -7,6 +7,7 @@ import { Trending } from '../pages/Trending'
 import { Series } from '../pages/Series'
 import { MovieDetail } from '../pages/MovieDetail'
 import { SeriesDetail } from '../pages/SeriesDetail'
+import { Auth } from '../pages/Auth'
 
 
 export const router = createBrowserRouter([
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
       {
         path: '/trending',
         element: <Trending />
+      },
+      {
+        path: '/auth',
+        element: <Auth />
       }
     ]
   }

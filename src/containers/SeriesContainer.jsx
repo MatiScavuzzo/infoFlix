@@ -5,18 +5,15 @@ import { PaginationContainer } from './PaginationContainer'
 import { SortBySelector } from '../components/SortBySelector'
 import { FilterByCategories } from '../components/FilterByCategories'
 import { Spinner } from '../components/Spinner'
-import { Link } from 'react-router-dom'
-import { HiHome } from 'react-icons/hi'
 import { ThemeContext } from '../contexts/ThemeContext'
+import { BtnHome } from '../components/BtnHome'
 
 export const SeriesContainer = () => {
   const { darkMode } = useContext(ThemeContext)
   const { showMoreSeriesHandler, isScrolled, findSeries, handlerSeriesSelect, onChangeHandler, onChangeSortByHandler, genresTVList, showLessSeriesHandler,allTvSeries, IMG_URL } = useContext(ApiContext)
   return (
     <div className={`${darkMode ? 'dark' : 'light'} flex flex-col relative`}>
-      <div className='absolute top-4 left-2'>
-        <button className={`${isScrolled} ${darkMode ? '' : 'text-neutral-100 bg-red-700 border-2 border-neutral-700'} bg-slate-500 fixed z-20 rounded-full`}><Link to='/'><HiHome className='p-2 w-10 h-10'/></Link></button>
-      </div>
+      <BtnHome />
       <div className='flex flex-col p-4 gap-4 md:flex-row items-center justify-around'>
         <input type='search' className={`${darkMode ? '' : 'border-2 text-neutral-100 border-neutral-700 bg-red-700 placeholder:text-neutral-100'} rounded-lg p-1`} onChange={onChangeHandler} placeholder='Buscar...' />
         <SortBySelector onChange={onChangeSortByHandler} className={`${darkMode ? '' : 'text-neutral-100 border-2 border-neutral-700 bg-red-700'} rounded-lg p-1`} />

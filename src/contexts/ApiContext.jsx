@@ -143,6 +143,11 @@ export const ApiContextProvider = ({ children }) => {
         break;
     }
   }
+  const toHomeHandler = () => {
+    setSelectedTabFilm('')
+    setSelectedTabSeries('')
+    setSelectedTabTrending('')
+  }
   
   
   useEffect(() => {
@@ -262,7 +267,8 @@ export const ApiContextProvider = ({ children }) => {
         handlerSelect,
         handlerSeriesSelect,
         isOpenHandler,
-        tabHandler
+        tabHandler,
+        toHomeHandler
       }}>
       {children}
     </ApiContext.Provider>
