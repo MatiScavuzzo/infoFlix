@@ -36,6 +36,13 @@ export const ApiContextProvider = ({ children }) => {
   const [selectedTabSeries, setSelectedTabSeries] = useState('')
   const [selectedTabTrending, setSelectedTabTrending] = useState('')
   const [isScrolled, setIsScrolled] = useState('')
+  const [mailTo, setMailTo] = useState('')
+  const [message, setMessage] = useState('')
+  const [user, setUser] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [showModal, setShowModal] = useState(false)
+  
   const API_KEY = 'api_key=ec755b7b2f3cf064edd7cd1219ddcf08'
   const API_URL = 'https://api.themoviedb.org/3/'
   const DISCOVER_ALLMOVIES = `${API_URL}discover/movie?${API_KEY}&language=en-US&sort_by=${sortBy.value}&page=${moviePage}&with_genres=${byGenres}&vote_count.gte=500`
@@ -45,7 +52,55 @@ export const ApiContextProvider = ({ children }) => {
   const TRENDING = `${API_URL}trending/all/${trendingPeriod}?${API_KEY}`
   const IMG_URL = 'https://image.tmdb.org/t/p/'
 
- 
+
+  const openModal = () => {
+    setShowModal(!showModal)
+  }
+  const closeModal = () => {
+    setShowModal(!showModal)
+  }
+  const validateEmail = (email) => {
+    const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!emailRegex.test(email)) {
+        return "El correo electrónico no es válido";
+    }
+    return "";
+  }
+  const validatePassword = (password) => {
+    // Comprobar que la contraseña cumple con ciertas reglas de seguridad
+    if (password.length < 8) {
+        return "La contraseña debe tener al menos 8 caracteres";
+    }
+    if (!/\d/.test(password)) {
+        return "La contraseña debe tener al menos un número";
+    }
+    if (!/[a-z]/.test(password)) {
+        return "La contraseña debe tener al menos una letra minúscula";
+    }
+    if (!/[A-Z]/.test(password)) {
+        return "La contraseña debe tener al menos una letra mayúscula";
+    }
+    return "";
+  }
+  const onChangePassHandler = (ev) => {
+    let pass = ev.target.value
+    setPassword(pass)
+  }
+  const onChangeUserHandler = (ev) => {
+    let userName = ev.target.value
+    setUser(userName);
+  }
+  const onSubmitLogInHandler = (ev) => {
+    ev.preventDefault()
+    const userError = validateEmail(user)
+    const passwordError = validatePassword(password)
+    if (userError || passwordError) {
+      setError(userError || passwordError)
+      return
+    }
+    setError('')
+    console.log(user, password);
+  }
   const dayOrWeekHandler = (ev) => {
     setTrendingPeriod(ev.target.value)
   } // Tendencias
@@ -250,6 +305,8 @@ export const ApiContextProvider = ({ children }) => {
         selectedTabSeries,
         selectedTabTrending,
         isScrolled,
+        error,
+        showModal,
         dayOrWeekHandler,
         showMoreMoviesHandler,
         showLessMoviesHandler,
@@ -268,7 +325,12 @@ export const ApiContextProvider = ({ children }) => {
         handlerSeriesSelect,
         isOpenHandler,
         tabHandler,
-        toHomeHandler
+        toHomeHandler,
+        onSubmitLogInHandler,
+        onChangeUserHandler,
+        onChangePassHandler,
+        openModal,
+        closeModal
       }}>
       {children}
     </ApiContext.Provider>
