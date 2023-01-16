@@ -8,7 +8,7 @@ import { HiLogin, HiLogout } from 'react-icons/hi'
 import { BtnTheme } from './BtnTheme'
 
 export const Navbar = ({className}) => {
-  const { isOpen, isLogIn, tabHandler, selectedTabFilm, toHomeHandler, selectedTabSeries, selectedTabTrending, isOpenHandler } = useContext(ApiContext)
+  const { isOpen, isLogIn, tabHandler, selectedTabFilm, toHomeHandler, selectedTabSeries, selectedTabTrending, isOpenHandler, logOutHandler } = useContext(ApiContext)
   return (
     <nav className={className}>
       <Link to='/'className='w-3/5' ><button onClick={toHomeHandler} className='w-full'><Logo className='w-full lg:w-5/6 p-2' /></button></Link>
@@ -20,7 +20,7 @@ export const Navbar = ({className}) => {
           <Link to='/series'><li className='font-black p-1 flex'><button value='series' onClick={tabHandler} className={`${selectedTabSeries} flex justify-center items-center gap-2`}>Series <HiOutlineSparkles className='w-6 h-6' /></button></li></Link>
           <Link to= '/trending'><li className='font-black p-1 flex'><button value='trending' onClick={tabHandler} className={`${selectedTabTrending} flex justify-center items-center gap-2`}>Destacados <HiOutlineArrowTrendingUp className='w-6 h-6' /></button></li></Link>
           <Link to= '/auth'><li className={`${isLogIn === false ? 'flex' : 'hidden'} font-black p-1`}><button className={`flex justify-center items-center gap-2`}>Registrarse / Iniciar sesión <HiLogin className='w-6 h-6' /></button> </li></Link>
-          <Link to= '/'><li className={`${isLogIn === true ? 'flex' : 'hidden'} font-black p-1`}><button className={`flex justify-center items-center gap-2`}>Cerrar sesión <HiLogout className='w-6 h-6' /></button> </li></Link>
+          <Link to= '/'><li className={`${isLogIn === true ? 'flex' : 'hidden'} font-black p-1`}><button onClick={logOutHandler} className={`flex justify-center items-center gap-2`}>Cerrar sesión <HiLogout className='w-6 h-6' /></button> </li></Link>
         </ul>
       </div> 
     </nav>

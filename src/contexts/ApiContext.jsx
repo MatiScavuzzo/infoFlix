@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 
 export const ApiContext = React.createContext()
 
@@ -40,8 +41,11 @@ export const ApiContextProvider = ({ children }) => {
   const [message, setMessage] = useState('')
   const [user, setUser] = useState('')
   const [password, setPassword] = useState('')
+  const [repPassword, setRepPassword] = useState('')
   const [error, setError] = useState('')
   const [showModal, setShowModal] = useState(false)
+  const [signUpForm, setSignUpForm] = useState(false)
+  const [signInForm, setSignInForm] = useState(true)
   
   const API_KEY = 'api_key=ec755b7b2f3cf064edd7cd1219ddcf08'
   const API_URL = 'https://api.themoviedb.org/3/'
@@ -52,7 +56,20 @@ export const ApiContextProvider = ({ children }) => {
   const TRENDING = `${API_URL}trending/all/${trendingPeriod}?${API_KEY}`
   const IMG_URL = 'https://image.tmdb.org/t/p/'
 
-
+  const auth = getAuth()
+  const alertHandler = () => {
+    if (isLogIn === false) {
+      alert('Deberás registrarte o iniciar sesión para continuar')
+    }
+  }
+  const signUpHandler = () => {
+    setSignUpForm(true)
+    setSignInForm(false)
+  }
+  const signInHandler = () => {
+    setSignUpForm(false)
+    setSignInForm(true)
+  }
   const openModal = () => {
     setShowModal(!showModal)
   }
@@ -86,11 +103,15 @@ export const ApiContextProvider = ({ children }) => {
     let pass = ev.target.value
     setPassword(pass)
   }
+  const onChangeRepeatPassHandler = (ev) => {
+    let repPass = ev.target.value
+    setRepPassword(repPass)
+  }
   const onChangeUserHandler = (ev) => {
     let userName = ev.target.value
     setUser(userName);
   }
-  const onSubmitLogInHandler = (ev) => {
+  const onSubmitSignUpHandler = (ev) => {
     ev.preventDefault()
     const userError = validateEmail(user)
     const passwordError = validatePassword(password)
@@ -99,7 +120,44 @@ export const ApiContextProvider = ({ children }) => {
       return
     }
     setError('')
-    console.log(user, password);
+    createUserWithEmailAndPassword(auth, user, password)
+    .then((userCredential) => {
+      const userName = userCredential.userName
+    })
+    .catch((error) => {
+      const errorCode = error.code
+      const errorMessage = error.message
+      console.log(error);
+    })  
+  }
+  const onSubmitSignInHandler = (ev) => {
+    ev.preventDefault()
+    const userError = validateEmail(user)
+    if (userError) {
+      setError(userError)
+      return
+    }
+    setError('')
+    signInWithEmailAndPassword(auth, user, password)
+    .then((userCredential) => {
+      const userName = userCredential.userName
+      setIsLogIn(true)
+    })
+    .catch((error) => {
+      const errorCode = error.code
+      const errorMessage = error.message
+      console.log(error);
+    })  
+  }
+  const logOutHandler = () => {
+    signOut(auth)
+    .then(() => {
+      alert('Vuelvas prontos!')
+      setIsLogIn(false)
+    })
+    .catch((error) => {
+      alert('Mmm... algo falló!')
+    })
   }
   const dayOrWeekHandler = (ev) => {
     setTrendingPeriod(ev.target.value)
@@ -307,6 +365,9 @@ export const ApiContextProvider = ({ children }) => {
         isScrolled,
         error,
         showModal,
+        password,
+        repPassword,
+        signUpForm,
         dayOrWeekHandler,
         showMoreMoviesHandler,
         showLessMoviesHandler,
@@ -326,11 +387,17 @@ export const ApiContextProvider = ({ children }) => {
         isOpenHandler,
         tabHandler,
         toHomeHandler,
-        onSubmitLogInHandler,
+        onSubmitSignUpHandler,
+        onSubmitSignInHandler,
         onChangeUserHandler,
         onChangePassHandler,
+        onChangeRepeatPassHandler,
         openModal,
-        closeModal
+        closeModal,
+        signInHandler,
+        signUpHandler,
+        logOutHandler,
+        alertHandler
       }}>
       {children}
     </ApiContext.Provider>

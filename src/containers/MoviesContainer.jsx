@@ -17,7 +17,9 @@ export const MoviesContainer = () => {
     onChangeSortByHandler, 
     onChangeHandler, 
     findMovies, 
-    allMovies, 
+    allMovies,
+    isLogin,
+    alertHandler, 
     IMG_URL } = useContext(ApiContext)
     const { darkMode } = useContext(ThemeContext)
   return (
@@ -35,9 +37,9 @@ export const MoviesContainer = () => {
           <Spinner /> : 
           (findMovies === undefined ? 
           allMovies.map(m =>
-          m.poster_path !== null && <MediaCard linkTo={`/movies/${m.id}`} key={m.id} id={m.id} title={m.title || m.name} imgSrc={`${IMG_URL}w185${m.poster_path}`}/>) : 
+          m.poster_path !== null && <MediaCard onClick={alertHandler} linkTo={`${isLogin === true ? `/movies/${m.id}` : '/auth'}`} key={m.id} id={m.id} title={m.title || m.name} imgSrc={`${IMG_URL}w185${m.poster_path}`}/>) : 
           findMovies.map(m => 
-          m.poster_path !== null && <MediaCard linkTo={`/movies/${m.id}`} key={m.id} id={m.id} title={m.title || m.name} imgSrc={`${IMG_URL}w185${m.poster_path}`}/>))}
+          m.poster_path !== null && <MediaCard onClick={alertHandler} linkTo={`${isLogin === true ? `/movies/${m.id}` : '/auth'}`} key={m.id} id={m.id} title={m.title || m.name} imgSrc={`${IMG_URL}w185${m.poster_path}`}/>))}
       </div>
       <div>
         <PaginationContainer onClickMore={showMoreMoviesHandler} onClickLess={showLessMoviesHandler} />
