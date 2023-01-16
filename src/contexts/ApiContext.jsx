@@ -46,6 +46,7 @@ export const ApiContextProvider = ({ children }) => {
   const [showModal, setShowModal] = useState(false)
   const [signUpForm, setSignUpForm] = useState(false)
   const [signInForm, setSignInForm] = useState(true)
+  const [requestTokenApi, setRequestTokenApi] = useState('')
   
   const API_KEY = 'api_key=ec755b7b2f3cf064edd7cd1219ddcf08'
   const API_URL = 'https://api.themoviedb.org/3/'
@@ -123,6 +124,11 @@ export const ApiContextProvider = ({ children }) => {
     createUserWithEmailAndPassword(auth, user, password)
     .then((userCredential) => {
       const userName = userCredential.userName
+      setIsLogIn(true)
+      fetch(`${API_URL}authentication/token/new?${API_KEY}`)
+      .then(res => res.json())
+      .then(resRequestToken => setRequestTokenApi(resRequestToken.request_token))
+      .finally(console.log(requestTokenApi))
     })
     .catch((error) => {
       const errorCode = error.code
