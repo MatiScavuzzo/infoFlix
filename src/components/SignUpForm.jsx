@@ -1,7 +1,7 @@
 import { useContext } from 'react'
-import { ApiContext } from '../contexts/ApiContext'
 import classNames from 'classnames'
 import { InfoPass } from './InfoPass'
+import { AuthContext } from '../contexts/AuthContext'
 
 const classModalOpen = classNames('absolute top-6 rounded-xl p-4 -inset-x-36 w-80 bg-black border-4 border-slate-400 opacity-80 flex flex-col gap-1')
 
@@ -17,7 +17,7 @@ export const SignUpForm = () => {
     showModal,
     signInHandler, 
     closeModal, 
-    error } = useContext(ApiContext)
+    error } = useContext(AuthContext)
   return (
     <div className='flex flex-col items-center justify-center'>
       <h1>Registrarse</h1>

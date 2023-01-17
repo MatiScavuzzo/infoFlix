@@ -5,6 +5,7 @@ import { MediaCard } from '../components/MediaCard'
 import { SortBySelector } from '../components/SortBySelector'
 import { Spinner } from '../components/Spinner'
 import { ApiContext } from '../contexts/ApiContext'
+import { AuthContext } from '../contexts/AuthContext'
 import { ThemeContext } from '../contexts/ThemeContext'
 import { PaginationContainer } from './PaginationContainer'
 
@@ -17,10 +18,9 @@ export const MoviesContainer = () => {
     onChangeSortByHandler, 
     onChangeHandler, 
     findMovies, 
-    allMovies,
-    isLogin,
-    alertHandler, 
+    allMovies, 
     IMG_URL } = useContext(ApiContext)
+    const { alertHandler } = useContext(AuthContext)
     const { darkMode } = useContext(ThemeContext)
   return (
     <div className={`${darkMode ? 'dark' : 'light'} flex flex-col relative`}>
@@ -37,9 +37,9 @@ export const MoviesContainer = () => {
           <Spinner /> : 
           (findMovies === undefined ? 
           allMovies.map(m =>
-          m.poster_path !== null && <MediaCard onClick={alertHandler} linkTo={`${isLogin === true ? `/movies/${m.id}` : '/auth'}`} key={m.id} id={m.id} title={m.title || m.name} imgSrc={`${IMG_URL}w185${m.poster_path}`}/>) : 
+          m.poster_path !== null && <MediaCard linkToIsLogIn={`/movies/${m.id}`} linkToIsLogOut='/auth' onClick={alertHandler} key={m.id} id={m.id} title={m.title || m.name} imgSrc={`${IMG_URL}w185${m.poster_path}`}/>) : 
           findMovies.map(m => 
-          m.poster_path !== null && <MediaCard onClick={alertHandler} linkTo={`${isLogin === true ? `/movies/${m.id}` : '/auth'}`} key={m.id} id={m.id} title={m.title || m.name} imgSrc={`${IMG_URL}w185${m.poster_path}`}/>))}
+          m.poster_path !== null && <MediaCard linkToIsLogIn={`/movies/${m.id}`} linkToIsLogOut='/auth' onClick={alertHandler} key={m.id} id={m.id} title={m.title || m.name} imgSrc={`${IMG_URL}w185${m.poster_path}`}/>))}
       </div>
       <div>
         <PaginationContainer onClickMore={showMoreMoviesHandler} onClickLess={showLessMoviesHandler} />

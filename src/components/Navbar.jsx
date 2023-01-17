@@ -6,9 +6,20 @@ import { Logo } from './Logo'
 import { HiOutlineArrowTrendingUp, HiOutlineFilm, HiOutlineSparkles } from 'react-icons/hi2'
 import { HiLogin, HiLogout } from 'react-icons/hi'
 import { BtnTheme } from './BtnTheme'
+import { AuthContext } from '../contexts/AuthContext'
 
 export const Navbar = ({className}) => {
-  const { isOpen, isLogIn, tabHandler, selectedTabFilm, toHomeHandler, selectedTabSeries, selectedTabTrending, isOpenHandler, logOutHandler } = useContext(ApiContext)
+  const { 
+    isOpen, 
+    tabHandler, 
+    selectedTabFilm, 
+    toHomeHandler, 
+    selectedTabSeries, 
+    selectedTabTrending, 
+    isOpenHandler } = useContext(ApiContext)
+  const {
+    isLogIn,
+    logOutHandler} = useContext(AuthContext)
   return (
     <nav className={className}>
       <Link to='/'className='w-3/5' ><button onClick={toHomeHandler} className='w-full'><Logo className='w-full lg:w-5/6 p-2' /></button></Link>

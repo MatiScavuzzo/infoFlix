@@ -8,6 +8,7 @@ import { ThemeContextProvider } from './contexts/ThemeContext'
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore'
+import { AuthContextProvider } from './contexts/AuthContext'
 
 // TODO: Add SDKs for Firebase products that you want to use
 
@@ -41,10 +42,12 @@ export const db = getFirestore(app)
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ThemeContextProvider>
-      <ApiContextProvider>
-        <RouterProvider router={router} />
-      </ApiContextProvider>
-    </ThemeContextProvider>
+    <AuthContextProvider>
+      <ThemeContextProvider>
+        <ApiContextProvider>
+          <RouterProvider router={router} />
+        </ApiContextProvider>
+      </ThemeContextProvider>
+    </AuthContextProvider>
   </React.StrictMode>
-)
+);

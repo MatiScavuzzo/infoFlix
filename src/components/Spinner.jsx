@@ -1,7 +1,7 @@
 export const Spinner = () => {
   return (
     <div aria-label='Loading...' role='status'>
-      <svg class='h-8 w-8 motion-reduce:animate-spin stroke-red-600' viewBox='0 0 256 256'>
+      <svg className='h-8 w-8 motion-reduce:animate-spin stroke-red-600' viewBox='0 0 256 256'>
         <line
           x1='128'
           y1='32'
@@ -27,7 +27,7 @@ export const Spinner = () => {
           y2='128'
           strokeLinecap='round'
           strokeLinejoin='round'
-          stroke-width='24'
+          strokeWidth='24'
         ></line>
         <line
           x1='195.9'

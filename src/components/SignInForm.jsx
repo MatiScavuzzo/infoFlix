@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { ApiContext } from '../contexts/ApiContext'
+import { AuthContext } from '../contexts/AuthContext'
 
 export const SignInForm = () => {
   const { 
@@ -7,7 +7,7 @@ export const SignInForm = () => {
     onChangeUserHandler, 
     onChangePassHandler, 
     signUpHandler, 
-    error } = useContext(ApiContext)
+    error } = useContext(AuthContext)
   return (
     <div className='flex flex-col items-center justify-center'>
       <h1>Iniciar Sesión</h1>
