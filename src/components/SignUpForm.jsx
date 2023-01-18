@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import classNames from 'classnames'
 import { InfoPass } from './InfoPass'
 import { AuthContext } from '../contexts/AuthContext'
+import { Spinner } from '../components/Spinner'
 
 const classModalOpen = classNames('absolute top-6 rounded-xl p-4 -inset-x-36 w-80 bg-black border-4 border-slate-400 opacity-80 flex flex-col gap-1')
 
@@ -16,10 +17,13 @@ export const SignUpForm = () => {
     openModal, 
     showModal,
     signInHandler, 
-    closeModal, 
+    closeModal,
+    isLogIn,
+    requestTokenApi,
+    API_REQUEST_TOKEN,
     error } = useContext(AuthContext)
   return (
-    <div className='flex flex-col items-center justify-center'>
+    <div className='flex relative flex-col items-center justify-center'>
       <h1>Registrarse</h1>
       <div className='flex items-center p-2 justify-center w-3/4 bg-black text-white border-4 border-slate-400 rounded-lg'>
         <form className='flex flex-col gap-2 items-center justify-center' onSubmit={onSubmitSignUpHandler}>
@@ -36,6 +40,9 @@ export const SignUpForm = () => {
           <button type="submit">Registrarse</button>
           <button onClick={signInHandler}>Iniciar Sesión</button>
         </form>
+      </div>
+      <div className={`${isLogIn === false ? 'hidden' : 'absolute bg-black bg-opacity-50 w-full h-screen flex items-center justify-center'}`}>
+        {requestTokenApi === '' ? <Spinner /> : <div className='text-white border-4 border-slate-400 w-1/2 p-2'><a href={API_REQUEST_TOKEN} rel='noopener noreferrer'>Click aquí para autenticar la cuenta</a></div>}
       </div>
     </div>
   )

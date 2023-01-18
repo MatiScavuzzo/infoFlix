@@ -15,8 +15,13 @@ export const AuthContextProvider = ( { children } ) => {
   const [signInForm, setSignInForm] = useState(true)
   const [requestTokenApi, setRequestTokenApi] = useState('')
   const [isLogIn, setIsLogIn] = useState(false)
+  const API_REQUEST_TOKEN = `https://www.themoviedb.org/authenticate/${requestTokenApi}?redirect_to=http://localhost:8080`
 
   const auth = getAuth()
+  const userLogged = auth.currentUser
+
+  
+
   const alertHandler = () => {
     if (isLogIn === false) {
       alert('Deberás registrarte o iniciar sesión para continuar')
@@ -110,7 +115,7 @@ export const AuthContextProvider = ( { children } ) => {
     .catch((error) => {
       const errorCode = error.code
       const errorMessage = error.message
-      console.log(error);
+      alert(errorMessage)
     })
   }
   const logOutHandler = () => {
@@ -133,6 +138,7 @@ export const AuthContextProvider = ( { children } ) => {
         signUpForm,
         requestTokenApi,
         isLogIn,
+        API_REQUEST_TOKEN,
         alertHandler,
         signUpHandler,
         signInHandler,
