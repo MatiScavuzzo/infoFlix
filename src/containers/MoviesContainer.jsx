@@ -5,7 +5,6 @@ import { MediaCard } from '../components/MediaCard'
 import { SortBySelector } from '../components/SortBySelector'
 import { Spinner } from '../components/Spinner'
 import { ApiContext } from '../contexts/ApiContext'
-import { AuthContext } from '../contexts/AuthContext'
 import { ThemeContext } from '../contexts/ThemeContext'
 import { PaginationContainer } from './PaginationContainer'
 
@@ -20,7 +19,6 @@ export const MoviesContainer = () => {
     findMovies, 
     allMovies, 
     IMG_URL } = useContext(ApiContext)
-    const { alertHandler } = useContext(AuthContext)
     const { darkMode } = useContext(ThemeContext)
   return (
     <div className={`${darkMode ? 'dark' : 'light'} flex flex-col relative`}>
@@ -33,13 +31,13 @@ export const MoviesContainer = () => {
         <FilterByCategories genresList={genresList} onChange={handlerSelect} className={`relative w-48 rounded-lg p-1 flex flex-col`} />
       </div>
       <div className='flex flex-wrap p-2 w-full'>
-        {!allMovies ? 
-          <Spinner /> : 
-          (findMovies === undefined ? 
-          allMovies.map(m =>
-          m.poster_path !== null && <MediaCard linkToIsLogIn={`/movies/${m.id}`} linkToIsLogOut='/auth' onClick={alertHandler} key={m.id} id={m.id} title={m.title || m.name} imgSrc={`${IMG_URL}w185${m.poster_path}`}/>) : 
-          findMovies.map(m => 
-          m.poster_path !== null && <MediaCard linkToIsLogIn={`/movies/${m.id}`} linkToIsLogOut='/auth' onClick={alertHandler} key={m.id} id={m.id} title={m.title || m.name} imgSrc={`${IMG_URL}w185${m.poster_path}`}/>))}
+        {!allMovies
+         ? <Spinner /> 
+         : (findMovies === undefined 
+          ? allMovies.map(m =>
+          m.poster_path !== null && <MediaCard linkTo={`/movies/${m.id}`} key={m.id} id={m.id} title={m.title || m.name} imgSrc={`${IMG_URL}w185${m.poster_path}`}/>) 
+          : findMovies.map(m => 
+          m.poster_path !== null && <MediaCard linkTo={`/movies/${m.id}`} key={m.id} id={m.id} title={m.title || m.name} imgSrc={`${IMG_URL}w185${m.poster_path}`}/>))}
       </div>
       <div>
         <PaginationContainer onClickMore={showMoreMoviesHandler} onClickLess={showLessMoviesHandler} />

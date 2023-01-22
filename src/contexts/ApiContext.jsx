@@ -37,6 +37,7 @@ export const ApiContextProvider = ({ children }) => {
   const [isScrolled, setIsScrolled] = useState('')
   const [mailTo, setMailTo] = useState('')
   const [message, setMessage] = useState('')
+  const [requestToken, setRequestToken] = useState('')
   
   
   const API_KEY = 'api_key=ec755b7b2f3cf064edd7cd1219ddcf08'
@@ -47,8 +48,17 @@ export const ApiContextProvider = ({ children }) => {
   const DISCOVER_ALLTVSERIES = `${API_URL}discover/tv?${API_KEY}&language=en-US&sort_by=${sortBy.value}&page=${seriesPage}&with_genres=${byGenresSeries}&vote_count.gte=500`
   const TRENDING = `${API_URL}trending/all/${trendingPeriod}?${API_KEY}`
   const IMG_URL = 'https://image.tmdb.org/t/p/'
+  const REQUEST_TOKEN = `${API_URL}authentication/token/new?${API_KEY}`
 
-  
+  const requestTokenHandler = () => {
+    if (requestToken === '') {
+      useEffect(() => {
+        fetch(`${REQUEST_TOKEN}`)
+        .then(res => res.json())
+        .then(resRT => setRequestToken(resRT.request_token))
+      })
+    }
+  }
   const dayOrWeekHandler = (ev) => {
     setTrendingPeriod(ev.target.value)
   } // Tendencias
