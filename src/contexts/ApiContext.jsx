@@ -38,6 +38,7 @@ export const ApiContextProvider = ({ children }) => {
   const [mailTo, setMailTo] = useState('')
   const [message, setMessage] = useState('')
   const [requestToken, setRequestToken] = useState('')
+  const [dateToken, setDateToken] = useState('')
   
   
   const API_KEY = 'api_key=ec755b7b2f3cf064edd7cd1219ddcf08'
@@ -49,16 +50,35 @@ export const ApiContextProvider = ({ children }) => {
   const TRENDING = `${API_URL}trending/all/${trendingPeriod}?${API_KEY}`
   const IMG_URL = 'https://image.tmdb.org/t/p/'
   const REQUEST_TOKEN = `${API_URL}authentication/token/new?${API_KEY}`
+  const AUTH_TOKEN = `https://www.themoviedb.org/authenticate/${requestToken}?redirect_to=http://localhost:8080/home`
 
-  const requestTokenHandler = () => {
-    if (requestToken === '') {
-      useEffect(() => {
-        fetch(`${REQUEST_TOKEN}`)
-        .then(res => res.json())
-        .then(resRT => setRequestToken(resRT.request_token))
-      })
+  useEffect(() => {
+    const getRequestToken = window.localStorage.getItem('requestToken')
+    const getDateToken = window.localStorage.getItem('dateToken')
+    const dateToken = new Date(getDateToken).toUTCString()
+    const actualDate = new Date().toUTCString()
+    const dateTokenParse = new Date(Date.parse(dateToken))
+    const actualDateParse = new Date(Date.parse(actualDate))
+    const dateTokenToMS = dateTokenParse.getTime()
+    const actualDateParseToMS = actualDateParse.getTime()
+
+    if (actualDateParseToMS > dateTokenToMS) {
+      window.localStorage.removeItem('requestToken')
     }
-  }
+
+    if (getRequestToken) {
+      setRequestToken(getRequestToken)
+    } else {
+      fetch(REQUEST_TOKEN)
+      .then(res => res.json())
+      .then(resRt => {
+        setRequestToken(resRt.request_token)
+        setDateToken(resRt.expires_at)
+        window.localStorage.setItem('requestToken', resRt.request_token)
+        window.localStorage.setItem('dateToken', resRt.expires_at)
+      })
+    } 
+  }, [])
   const dayOrWeekHandler = (ev) => {
     setTrendingPeriod(ev.target.value)
   } // Tendencias
@@ -253,12 +273,14 @@ export const ApiContextProvider = ({ children }) => {
         API_URL,
         API_KEY,
         IMG_URL,
+        AUTH_TOKEN,
         buttonShowLess,
         isOpen,
         selectedTabFilm,
         selectedTabSeries,
         selectedTabTrending,
         isScrolled,
+        requestToken,
         dayOrWeekHandler,
         showMoreMoviesHandler,
         showLessMoviesHandler,

@@ -51,12 +51,15 @@ export const MovieDetail = () => {
               <div className='flex flex-col'>
                 <h3>Producción</h3>
                 <div className='flex p-2 gap-2 items-center justify-center'>
-                  {!movieData ? <Spinner /> : movieData.production_companies.map(pc => 
+                  {!movieData ? <Spinner /> : movieData.production_companies.map(pc => pc.logo_path !== null ?
                     <div key={pc.id} className='flex bg-slate-400 p-1 rounded-md flex-wrap h-20 text-black flex-col gap-2 items-center justify-center'>
                       <img 
                         className='w-4/5'
                         src={`${IMG_URL}w92${pc.logo_path}`}
                         alt={pc.name}/>
+                    </div> :
+                    <div key={pc.id} className='flex bg-slate-400 p-1 rounded-md flex-wrap h-20 text-black flex-col gap-2 items-center justify-center'>
+                      <p className='w-4/5 font-bold'>{pc.name}</p>
                     </div>)}
                 </div>
               </div>
@@ -74,7 +77,7 @@ export const MovieDetail = () => {
                       {!moviesProviders.flatrate
                         ? !moviesProviders.rent
                           ? moviesProviders.buy.map((mp) => (
-                              <a key={mp.id} href={moviesProviders.link} target='_blank'>
+                              <a key={mp.provider_id} href={moviesProviders.link} target='_blank'>
                                 <img
                                   className='rounded-xl shadow-lg shadow-red-600'
                                   src={`${IMG_URL}w45${mp.logo_path}`}
@@ -83,7 +86,7 @@ export const MovieDetail = () => {
                               </a>
                             ))
                           : moviesProviders.rent.map((mp) => (
-                              <a key={mp.id} href={moviesProviders.link} target='_blank'>
+                              <a key={mp.provider_id} href={moviesProviders.link} target='_blank'>
                                 <img
                                   className='rounded-xl shadow-lg shadow-red-600'
                                   src={`${IMG_URL}w45${mp.logo_path}`}
@@ -92,7 +95,7 @@ export const MovieDetail = () => {
                               </a>
                             ))
                         : moviesProviders.flatrate.map((mp) => (
-                            <a key={mp.id} href={moviesProviders.link} target='_blank'>
+                            <a key={mp.provider_id} href={moviesProviders.link} target='_blank'>
                               <img
                                 className='rounded-xl shadow-lg shadow-red-600'
                                 src={`${IMG_URL}w45${mp.logo_path}`}

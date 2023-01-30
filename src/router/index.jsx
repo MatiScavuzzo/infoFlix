@@ -7,6 +7,7 @@ import { Trending } from '../pages/Trending'
 import { Series } from '../pages/Series'
 import { MovieDetail } from '../pages/MovieDetail'
 import { SeriesDetail } from '../pages/SeriesDetail'
+import { FirstView } from '../pages/FirstView'
 
 
 export const router = createBrowserRouter([
@@ -17,6 +18,10 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
+        element: <FirstView />
+      },
+      {
+        path: '/home',
         element: <Home />
       },
       {

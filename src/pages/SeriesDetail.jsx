@@ -67,12 +67,15 @@ export const SeriesDetail = () => {
               <div className='flex flex-col'>
                 <h3>Producción</h3>
                 <div className='flex p-2 gap-2 items-center justify-center flex-wrap'>
-                  {!seriesData ? <Spinner /> : seriesData.production_companies.map(pc => 
+                  {!seriesData ? <Spinner /> : seriesData.production_companies.map(pc => pc.logo_path !== null ? 
                     <div key={pc.id} className='flex bg-slate-400 p-1 rounded-md flex-wrap h-20 text-black flex-col gap-2 items-center justify-center'>
                       <img 
                         className='w-4/5'
                         src={`${IMG_URL}w92${pc.logo_path}`}
                         alt={pc.name}/>
+                    </div> :
+                    <div key={pc.id} className='flex bg-slate-400 p-1 rounded-md flex-wrap h-20 text-black flex-col gap-2 items-center justify-center'>
+                      <p className='w-4/5 font-bold'>{pc.name}</p>
                     </div>)}
                 </div>
               </div>
@@ -88,8 +91,8 @@ export const SeriesDetail = () => {
                     <div className='flex items-center justify-center p-2 gap-2'>
                       {!seriesProviders.flatrate
                         ? !seriesProviders.rent
-                          ? seriesProviders.buy.map((mp) => (
-                              <a key={mp.id} href={seriesProviders.link} target='_blank'>
+                          ? seriesProviders.buy.map(mp => (
+                              <a key={mp.provider_id} href={seriesProviders.link} target='_blank'>
                                 <img
                                   className='rounded-xl shadow-lg shadow-red-600'
                                   src={`${IMG_URL}w45${mp.logo_path}`}
@@ -97,8 +100,8 @@ export const SeriesDetail = () => {
                                 />
                               </a>
                             ))
-                          : seriesProviders.rent.map((mp) => (
-                              <a key={mp.id} href={seriesProviders.link} target='_blank'>
+                          : seriesProviders.rent.map(mp => (
+                              <a key={mp.provider_id} href={seriesProviders.link} target='_blank'>
                                 <img
                                   className='rounded-xl shadow-lg shadow-red-600'
                                   src={`${IMG_URL}w45${mp.logo_path}`}
@@ -106,8 +109,8 @@ export const SeriesDetail = () => {
                                 />
                               </a>
                             ))
-                        : seriesProviders.flatrate.map((mp) => (
-                            <a key={mp.id} href={seriesProviders.link} target='_blank'>
+                        : seriesProviders.flatrate.map(mp => (
+                            <a key={mp.provider_id} href={seriesProviders.link} target='_blank'>
                               <img
                                 className='rounded-xl shadow-lg shadow-red-600'
                                 src={`${IMG_URL}w45${mp.logo_path}`}
