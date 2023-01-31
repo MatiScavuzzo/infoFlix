@@ -35,11 +35,8 @@ export const ApiContextProvider = ({ children }) => {
   const [selectedTabSeries, setSelectedTabSeries] = useState('')
   const [selectedTabTrending, setSelectedTabTrending] = useState('')
   const [isScrolled, setIsScrolled] = useState('')
-  const [mailTo, setMailTo] = useState('')
-  const [message, setMessage] = useState('')
   const [requestToken, setRequestToken] = useState('')
-  const [dateToken, setDateToken] = useState('')
-  
+  const [tokenApproved, setTokenApproved] = useState(false)
   
   const API_KEY = 'api_key=ec755b7b2f3cf064edd7cd1219ddcf08'
   const API_URL = 'https://api.themoviedb.org/3/'
@@ -50,7 +47,7 @@ export const ApiContextProvider = ({ children }) => {
   const TRENDING = `${API_URL}trending/all/${trendingPeriod}?${API_KEY}`
   const IMG_URL = 'https://image.tmdb.org/t/p/'
   const REQUEST_TOKEN = `${API_URL}authentication/token/new?${API_KEY}`
-  const AUTH_TOKEN = `https://www.themoviedb.org/authenticate/${requestToken}?redirect_to=http://localhost:8080/home`
+  const AUTH_TOKEN = `https://www.themoviedb.org/authenticate/${requestToken}?redirect_to=http://localhost:8080/`
 
   useEffect(() => {
     const getRequestToken = window.localStorage.getItem('requestToken')
@@ -281,6 +278,7 @@ export const ApiContextProvider = ({ children }) => {
         selectedTabTrending,
         isScrolled,
         requestToken,
+        tokenApproved,
         dayOrWeekHandler,
         showMoreMoviesHandler,
         showLessMoviesHandler,
