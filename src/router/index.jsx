@@ -1,4 +1,4 @@
-import { createBrowserRouter, useParams } from 'react-router-dom'
+import { createBrowserRouter } from 'react-router-dom'
 import { LayoutPublic } from '../layouts/LayoutPublic'
 import { Movies } from '../pages/Movies'
 import { Home } from '../pages/Home'
