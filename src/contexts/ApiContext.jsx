@@ -53,22 +53,25 @@ export const ApiContextProvider = ({ children }) => {
   useEffect(() => {
     const getSessionId = window.localStorage.getItem('sessionId')
     const getRequestToken = window.localStorage.getItem('requestToken')
-    fetch(`${API_URL}authenticacion/session/new`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      },
-      body: getRequestToken
-    })
-    .then(res => res.json())
-    .then(data => {
-      setSessionId(data.session_id)
-      setTokenApproved(data.success)
-      window.localStorage.setItem('sessionId', data.session_id)
-    })
-    .catch(error => {
-      console.log(error)
-    })
+    if (getRequestToken) {
+      fetch(`https://cors-anywhere.herokuapp.com/${API_URL}authentication/session/new?${API_KEY}`, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+        },
+        body: JSON.stringify({request_token: getRequestToken})
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setSessionId(data.session_id);
+          setTokenApproved(data.success);
+          window.localStorage.setItem('sessionId', data.session_id);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   })
   useEffect(() => {
     const getRequestToken = window.localStorage.getItem('requestToken')
