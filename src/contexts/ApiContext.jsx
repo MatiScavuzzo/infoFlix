@@ -37,68 +37,71 @@ export const ApiContextProvider = ({ children }) => {
   const [isScrolled, setIsScrolled] = useState('')
   const [requestToken, setRequestToken] = useState('')
   const [tokenApproved, setTokenApproved] = useState(false)
-  const [sessionId, setSessionId] = useState(null)
+  const [accountId, setAccountId] = useState('')
   
   const API_KEY = 'api_key=ec755b7b2f3cf064edd7cd1219ddcf08'
-  const API_URL = 'https://api.themoviedb.org/3/'
-  const DISCOVER_ALLMOVIES = `${API_URL}discover/movie?${API_KEY}&language=en-US&sort_by=${sortBy.value}&page=${moviePage}&with_genres=${byGenres}&vote_count.gte=500`
-  const DISCOVER_MOVIE = `${API_URL}discover/movie?${API_KEY}&language=en-US&sort_by=popularity.desc&vote_count.gte=500`
-  const DISCOVER_TVSERIES = `${API_URL}discover/tv?${API_KEY}&sort_by=popularity.desc&vote_count.gte=500`
-  const DISCOVER_ALLTVSERIES = `${API_URL}discover/tv?${API_KEY}&language=en-US&sort_by=${sortBy.value}&page=${seriesPage}&with_genres=${byGenresSeries}&vote_count.gte=500`
-  const TRENDING = `${API_URL}trending/all/${trendingPeriod}?${API_KEY}`
+  const BEARER_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlYzc1NWI3YjJmM2NmMDY0ZWRkN2NkMTIxOWRkY2YwOCIsInN1YiI6IjYzODYxYzRjMjI5YWUyMTU1YzU0NzViMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.52fuwv4zFQRdxnnmPi3FsjqZR6kiq1NNV71bYdD9V1M'
+  const API_URL = 'https://api.themoviedb.org/'
+  const DISCOVER_ALLMOVIES = `${API_URL}3/discover/movie?${API_KEY}&language=en-US&sort_by=${sortBy.value}&page=${moviePage}&with_genres=${byGenres}&vote_count.gte=500`
+  const DISCOVER_MOVIE = `${API_URL}3/discover/movie?${API_KEY}&language=en-US&sort_by=popularity.desc&vote_count.gte=500`
+  const DISCOVER_TVSERIES = `${API_URL}3/discover/tv?${API_KEY}&sort_by=popularity.desc&vote_count.gte=500`
+  const DISCOVER_ALLTVSERIES = `${API_URL}3/discover/tv?${API_KEY}&language=en-US&sort_by=${sortBy.value}&page=${seriesPage}&with_genres=${byGenresSeries}&vote_count.gte=500`
+  const TRENDING = `${API_URL}3/trending/all/${trendingPeriod}?${API_KEY}`
   const IMG_URL = 'https://image.tmdb.org/t/p/'
-  const REQUEST_TOKEN = `${API_URL}authentication/token/new?${API_KEY}`
-  const AUTH_TOKEN = `https://www.themoviedb.org/authenticate/${requestToken}?redirect_to=http://localhost:8080/`
+  const REQUEST_TOKEN = `${API_URL}4/auth/request_token`
+  const AUTH_TOKEN = `${API_URL}4/auth/access_token`
+  const APPROVE_TOKEN = `https://www.themoviedb.org/auth/access?request_token=${requestToken}`
 
   useEffect(() => {
-    const getSessionId = window.localStorage.getItem('sessionId')
     const getRequestToken = window.localStorage.getItem('requestToken')
+    console.log(getRequestToken)
     if (getRequestToken) {
-      fetch(`https://cors-anywhere.herokuapp.com/${API_URL}authentication/session/new?${API_KEY}`, {
+      setRequestToken(getRequestToken)
+    } else {
+      fetch(REQUEST_TOKEN, {
         method: 'POST',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: {
           'Content-Type': 'application/json;charset=utf-8',
+          authorization: `Bearer ${BEARER_TOKEN}`,
         },
-        body: JSON.stringify({request_token: getRequestToken})
+        body: JSON.stringify({ redirect_to: 'http://localhost:8080/home' }),
       })
         .then((res) => res.json())
         .then((data) => {
-          setSessionId(data.session_id);
+          console.log(data);
+          setRequestToken(data.request_token);
           setTokenApproved(data.success);
-          window.localStorage.setItem('sessionId', data.session_id);
+          window.localStorage.setItem('requestToken', data.request_token);
         })
         .catch((error) => {
           console.log(error);
         });
     }
-  })
-  useEffect(() => {
-    const getRequestToken = window.localStorage.getItem('requestToken')
-    const getDateToken = window.localStorage.getItem('dateToken')
-    const dateToken = new Date(getDateToken).toUTCString()
-    const actualDate = new Date().toUTCString()
-    const dateTokenParse = new Date(Date.parse(dateToken))
-    const actualDateParse = new Date(Date.parse(actualDate))
-    const dateTokenToMS = dateTokenParse.getTime()
-    const actualDateParseToMS = actualDateParse.getTime()
-
-    if (actualDateParseToMS > dateTokenToMS) {
-      window.localStorage.removeItem('requestToken')
-    }
-
-    if (getRequestToken) {
-      setRequestToken(getRequestToken)
-    } else {
-      fetch(REQUEST_TOKEN)
-      .then(res => res.json())
-      .then(resRt => {
-        setRequestToken(resRt.request_token)
-        window.localStorage.setItem('requestToken', resRt.request_token)
-        window.localStorage.setItem('dateToken', resRt.expires_at)
-      })
-    } 
   }, [])
+  const getAccountIdHandler = () => {
+    const getAccountId = window.localStorage.getItem('accountId')
+    const getRequestToken = window.localStorage.getItem('requestToken')
+    if (getRequestToken) {
+      fetch(AUTH_TOKEN, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-type': 'application/json;charset=utf-8',
+          authorization: `Bearer ${BEARER_TOKEN}`
+        },
+        body: JSON.stringify({request_token: getRequestToken})
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+        setAccountId(data.account_id)
+        window.localStorage.setItem('accountId', data.account_id)
+      })
+      .catch(error => console.log(error))
+      return console.log(getAccountId)
+    }
+  }
   const dayOrWeekHandler = (ev) => {
     setTrendingPeriod(ev.target.value)
   } // Tendencias
@@ -222,12 +225,12 @@ export const ApiContextProvider = ({ children }) => {
     };
   }, [])
   useEffect(() => {
-    fetch(`${API_URL}genre/movie/list?${API_KEY}&language=es-AR`)
+    fetch(`${API_URL}3/genre/movie/list?${API_KEY}&language=es-AR`)
     .then(res => res.json())
     .then(resGenres => setGenresList(resGenres.genres))
   }, []) // Categorías Movies
   useEffect(() => {
-    fetch(`${API_URL}genre/tv/list?${API_KEY}&language=es-AR`)
+    fetch(`${API_URL}3/genre/tv/list?${API_KEY}&language=es-AR`)
     .then(res => res.json())
     .then(resGenres => setGenresTVList(resGenres.genres))
   }, []) // Categorías Series
@@ -237,12 +240,12 @@ export const ApiContextProvider = ({ children }) => {
     .then(resAllMovies => {allMovies == [] ? setAllMovies(resAllMovies.results) : setAllMovies(allMovies.concat(resAllMovies.results))})
   }, [DISCOVER_ALLMOVIES]) // Ver todas las Movies
   useEffect(() => {
-    fetch(`${API_URL}search/movie?${API_KEY}&language=en-US&query=${queryMovie}`)
+    fetch(`${API_URL}3/search/movie?${API_KEY}&language=en-US&query=${queryMovie}`)
     .then(res => res.json())
     .then(resQueryMovies => setFindMovies(resQueryMovies.results))
   }, [queryMovie]) // Buscador Movies
   useEffect(() => {
-    fetch(`${API_URL}search/tv?${API_KEY}&language=en-US&query=${querySeries}`)
+    fetch(`${API_URL}3/search/tv?${API_KEY}&language=en-US&query=${querySeries}`)
     .then(res => res.json())
     .then(resQuerySeries => setFindSeries(resQuerySeries.results))
   }, [querySeries]) // Buscador Series
@@ -293,7 +296,7 @@ export const ApiContextProvider = ({ children }) => {
         API_URL,
         API_KEY,
         IMG_URL,
-        AUTH_TOKEN,
+        APPROVE_TOKEN,
         buttonShowLess,
         isOpen,
         selectedTabFilm,
@@ -320,7 +323,8 @@ export const ApiContextProvider = ({ children }) => {
         handlerSeriesSelect,
         isOpenHandler,
         tabHandler,
-        toHomeHandler
+        toHomeHandler,
+        getAccountIdHandler
       }}>
       {children}
     </ApiContext.Provider>

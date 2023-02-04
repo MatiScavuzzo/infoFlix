@@ -5,7 +5,7 @@ import { ApiContext } from '../contexts/ApiContext'
 import { ThemeContext } from '../contexts/ThemeContext'
 
 export const FirstView = () => {
-  const { AUTH_TOKEN } = useContext(ApiContext)
+  const { APPROVE_TOKEN } = useContext(ApiContext)
   const { darkMode } = useContext(ThemeContext)
   return (
     <div
@@ -31,7 +31,7 @@ export const FirstView = () => {
                   streaming preferidos, hacé click{' '}
                   <a
                     className='border border-red-600 font-semibold p-1 rounded-lg'
-                    href={AUTH_TOKEN}
+                    href={APPROVE_TOKEN}
                     target='_blank'
                     rel='noopener noreferrer'
                   >
