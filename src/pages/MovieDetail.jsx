@@ -5,18 +5,24 @@ import { ApiContext } from '../contexts/ApiContext'
 import { ThemeContext } from '../contexts/ThemeContext'
 
 export const MovieDetail = () => {
-  const { API_URL, API_KEY, movieData, setMovieData, IMG_URL, moviesProviders, setMoviesProviders } = useContext(ApiContext)
+  const { API_URL_V3, API_KEY, movieData, setMovieData, IMG_URL, moviesProviders, setMoviesProviders, GET_METHOD_REQUEST } = useContext(ApiContext)
   const { darkMode } = useContext(ThemeContext)
   const { movieId } = useParams()
   useEffect(() => {
-    fetch(`${API_URL}movie/${movieId}?${API_KEY}&language=es-AR`)
+    fetch(`${API_URL_V3}movie/${movieId}?${API_KEY}&language=es-AR`)
     .then(res => res.json())
-    .then(resMovieData => setMovieData(resMovieData))
+    .then(resMovieData => {
+      setMovieData(resMovieData)
+    })
+    .catch(error => console.log(error))
   }, [movieId])
   useEffect(() => {
-    fetch(`${API_URL}movie/${movieId}/watch/providers?${API_KEY}`)
+    fetch(`${API_URL_V3}movie/${movieId}/watch/providers?${API_KEY}`)
       .then(res => res.json())
-      .then(resWatchProviders => setMoviesProviders(resWatchProviders.results.AR))
+      .then(resWatchProviders => {
+        setMoviesProviders(resWatchProviders.results.AR)
+      })
+      .catch(error => console.log(error))
   }, [movieId])
   return (
     <>
@@ -64,11 +70,10 @@ export const MovieDetail = () => {
                 </div>
               </div>
               <div className='flex items-center justify-center'>
-                {!moviesProviders ? (
+                {moviesProviders === undefined ? (
                   <div className='flex flex-col'>
                     <h3>Proveedores disponibles:</h3>
-                    <p>No tenemos información de proveedores para mostrar</p>
-                    <p>Sólo en cines</p>
+                    <p>No tenemos información de proveedores para mostrar en Argentina</p>
                   </div>
                 ) : (
                   <div className='flex flex-col items-center p-2'>

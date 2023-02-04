@@ -6,15 +6,15 @@ import { ThemeContext } from '../contexts/ThemeContext'
 
 export const SeriesDetail = () => {
   const { darkMode } = useContext(ThemeContext)
-  const { API_URL, API_KEY, seriesData, setSeriesData, IMG_URL, seriesProviders, setSeriesProviders } = useContext(ApiContext)
+  const { API_URL_V3, API_KEY, seriesData, setSeriesData, IMG_URL, seriesProviders, setSeriesProviders } = useContext(ApiContext)
   const { serieId } = useParams()
   useEffect(() => {
-    fetch(`${API_URL}tv/${serieId}?${API_KEY}&language=es-AR`)
+    fetch(`${API_URL_V3}tv/${serieId}?${API_KEY}&language=es-AR`)
     .then(res => res.json())
     .then(resSeriesData => setSeriesData(resSeriesData))
   }, [serieId])
   useEffect(() => {
-    fetch(`${API_URL}tv/${serieId}/watch/providers?${API_KEY}`)
+    fetch(`${API_URL_V3}tv/${serieId}/watch/providers?${API_KEY}`)
       .then(res => res.json())
       .then(resWatchProviders => setSeriesProviders(resWatchProviders.results.AR))
   }, [serieId])
