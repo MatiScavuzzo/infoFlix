@@ -39,12 +39,16 @@ export const FirstView = () => {
                   </a>{' '}
                   para registrarte o acceder en TMDb (The Movie Database). Una
                   vez logueado autorizás a InfoFlix y automáticamente volvés a
-                  la app.
+                  la app, donde te vamos a pedir crear un nombre de usuario para que puedas acceder
+                  a InfoFlix cuando quieras, desde donde quieras.
                   <span className='font-semibold underline underline-offset-4'>
                     Tené en cuenta que InfoFlix no va a solicitarte en ningún
                     momento los datos de registro en TMDb.
                   </span>
                 </article>
+              </li>
+              <li className='text-left'>
+                Si ya tienes cuenta, haz click <Link className='border border-red-600 font-semibold p-1 rounded-lg' to={'/auth'}>aquí</Link> para iniciar sesión
               </li>
               <li>
                 <article className='text-left'>
