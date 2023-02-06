@@ -100,13 +100,11 @@ export const ApiContextProvider = ({ children }) => {
     const getRequestToken = window.localStorage.getItem('requestToken')
     if (getRequestToken) {
       const rT = {request_token: getRequestToken}
-      fetch(`${API_URL}auth/access_token`, postMethodRequest(rT))
+      fetch(AUTH_TOKEN, postMethodRequest(rT))
       .then(res => res.json())
       .then(data => {
         console.log(data)
         setAccountId(data.account_id)
-        window.localStorage.removeItem('requestToken')
-        window.sessionStorage.setItem('accountId', data.account_id)
       })
       .catch(error => console.log(error))
     }
@@ -133,8 +131,9 @@ export const ApiContextProvider = ({ children }) => {
         } else {
           insertData(user)
         }
-      } else if (dataBase[0].username === userName) {
+      } else if (dataBase.some(user => user.username === userName)) {
         alert('Ya tenemos un usuario registrado con ese nombre, elige otro por favor')
+        return
       } else {
         insertData(user)
       }

@@ -11,7 +11,7 @@ export const Auth = () => {
   return (
     <div className={`${darkMode ? 'dark' : 'light'}`}>
       <div className='border-4 border-slate-400 p-2'>
-        <SignInForm onSubmit={onSubmitGetAccountIdHandler} />
+        <SignInForm onClick={onSubmitGetAccountIdHandler} />
       </div>
     </div>
   )
