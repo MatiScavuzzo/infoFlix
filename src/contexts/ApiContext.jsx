@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { AuthContext } from './AuthContext'
 
 export const ApiContext = React.createContext()
 
@@ -38,6 +39,10 @@ export const ApiContextProvider = ({ children }) => {
   const [requestToken, setRequestToken] = useState('')
   const [tokenApproved, setTokenApproved] = useState(false)
   const [accountId, setAccountId] = useState('')
+  const [userName, setUserName] = useState('')
+  const [password, setPassword] = useState('')
+  const {getDB, dataBase, insertData} = useContext(AuthContext)
+
   
   const API_KEY = 'api_key=ec755b7b2f3cf064edd7cd1219ddcf08'
   const BEARER_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlYzc1NWI3YjJmM2NmMDY0ZWRkN2NkMTIxOWRkY2YwOCIsInN1YiI6IjYzODYxYzRjMjI5YWUyMTU1YzU0NzViMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.52fuwv4zFQRdxnnmPi3FsjqZR6kiq1NNV71bYdD9V1M'
@@ -72,40 +77,67 @@ export const ApiContextProvider = ({ children }) => {
     }
   }
 
-
+  
   useEffect(() => {
     const getRequestToken = window.localStorage.getItem('requestToken')
-    const redirectTo = {redirect_to: 'http://localhost:8080/home'}
+    const redirectTo = {redirect_to: 'http://localhost:8080/auth'}
     if (getRequestToken) {
       setRequestToken(getRequestToken)
     } else {
       fetch(REQUEST_TOKEN, postMethodRequest(redirectTo))
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
-          setRequestToken(data.request_token);
-          setTokenApproved(data.success);
-          window.localStorage.setItem('requestToken', data.request_token);
+          setRequestToken(data.request_token)
+          window.localStorage.setItem('requestToken', data.request_token)
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error)
         });
-    }
-  }, [])
+    }  
+    }, [])
+
   const getAccountIdHandler = () => {
-    const getAccountId = window.localStorage.getItem('accountId')
     const getRequestToken = window.localStorage.getItem('requestToken')
     if (getRequestToken) {
       const rT = {request_token: getRequestToken}
-      fetch(AUTH_TOKEN, postMethodRequest(rT))
+      fetch(`${API_URL}auth/access_token`, postMethodRequest(rT))
       .then(res => res.json())
       .then(data => {
         console.log(data)
         setAccountId(data.account_id)
-        window.localStorage.setItem('accountId', data.account_id)
+        window.localStorage.removeItem('requestToken')
+        window.sessionStorage.setItem('accountId', data.account_id)
       })
       .catch(error => console.log(error))
-      return console.log(getAccountId)
+    }
+  }
+
+  const onChangeUserNameHandler = (ev) => {
+    setUserName(ev.target.value)
+  }
+  const onChangePasswordHandler = (ev) => {
+    setPassword(ev.target.value)
+  }
+
+  const onSubmitGetAccountIdHandler = () => {
+    getDB()
+    const user = {
+      account_id: accountId,
+      username: userName,
+      password: password
+    }
+    if (accountId !== '') {
+      if (dataBase == []) {
+        if (user.username === '' || user.password === '') {
+          alert('Debe completar todos los campos para enviarlos')
+        } else {
+          insertData(user)
+        }
+      } else if (dataBase[0].username === userName) {
+        alert('Ya tenemos un usuario registrado con ese nombre, elige otro por favor')
+      } else {
+        insertData(user)
+      }
     }
   }
   const dayOrWeekHandler = (ev) => {
@@ -312,6 +344,7 @@ export const ApiContextProvider = ({ children }) => {
         isScrolled,
         requestToken,
         tokenApproved,
+        accountId,
         dayOrWeekHandler,
         showMoreMoviesHandler,
         showLessMoviesHandler,
@@ -331,7 +364,10 @@ export const ApiContextProvider = ({ children }) => {
         isOpenHandler,
         tabHandler,
         toHomeHandler,
-        getAccountIdHandler
+        getAccountIdHandler,
+        onChangeUserNameHandler,
+        onChangePasswordHandler,
+        onSubmitGetAccountIdHandler
       }}>
       {children}
     </ApiContext.Provider>
