@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 .env
+package-lock.json
+postcss.config.cjs
+tailwind.config.cjs
+vite.config.js
 
 
 # Editor directories and files

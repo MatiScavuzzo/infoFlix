@@ -39,6 +39,7 @@ export const ApiContextProvider = ({ children }) => {
   const [requestToken, setRequestToken] = useState('')
   const [tokenApproved, setTokenApproved] = useState(false)
   const [accountId, setAccountId] = useState('')
+  const [accessToken, setAccessToken] = useState('')
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const {getDB, dataBase, insertData} = useContext(AuthContext)
@@ -103,8 +104,8 @@ export const ApiContextProvider = ({ children }) => {
       fetch(AUTH_TOKEN, postMethodRequest(rT))
       .then(res => res.json())
       .then(data => {
-        console.log(data)
         setAccountId(data.account_id)
+        setAccessToken(data.access_token)
       })
       .catch(error => console.log(error))
     }
@@ -121,6 +122,7 @@ export const ApiContextProvider = ({ children }) => {
     getDB()
     const user = {
       account_id: accountId,
+      access_token: accessToken,
       username: userName,
       password: password
     }
