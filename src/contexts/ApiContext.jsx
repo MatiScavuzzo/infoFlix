@@ -354,8 +354,6 @@ export const ApiContextProvider = ({ children }) => {
         tabHandler,
         toHomeHandler,
         getAccountIdHandler,
-        onChangeUserNameHandler,
-        onChangePasswordHandler,
         onSubmitGetAccountIdHandler
       }}>
       {children}

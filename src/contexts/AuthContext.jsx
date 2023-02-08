@@ -11,9 +11,10 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 export const AuthContextProvider = ( {children} ) => {
   const [dataBase, setDataBase] = useState([])
   const [signIn, setSignIn] = useState(true)
-  const [isLoggedIn, setIsLoggedIn] = (false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
+  const [userAccount, setUserAccount] = useState([])
   const [accountId, setAccountId] = useState('')
   const [accessToken, setAccessToken] = useState('')
 
@@ -41,6 +42,23 @@ export const AuthContextProvider = ( {children} ) => {
   useEffect(() => {
     getDB()
   }, [])
+
+  const getUserDB = async (username) => {
+    const { data , error } = await supabase.from('Account').select().eq('username', username)
+    console.log(data)
+    if (error) {
+      console.log(error)
+    }
+    return setUserAccount(data)
+  }
+
+  useEffect(() => {
+    getUserDB(userName)
+  }, [userName])
+
+  useEffect(() => {
+    console.log(userAccount)
+  }, [userAccount])
 
   const logInHandler = () => {
     setIsLoggedIn(true)
