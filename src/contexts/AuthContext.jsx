@@ -10,7 +10,25 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 export const AuthContextProvider = ( {children} ) => {
   const [dataBase, setDataBase] = useState([])
-  const [signIn, setSignIn] = useState(false)
+  const [signIn, setSignIn] = useState(true)
+  const [isLoggedIn, setIsLoggedIn] = (false)
+  const [userName, setUserName] = useState('')
+  const [password, setPassword] = useState('')
+  const [accountId, setAccountId] = useState('')
+  const [accessToken, setAccessToken] = useState('')
+
+  const onChangeUserNameHandler = (ev) => {
+    setUserName(ev.target.value)
+  }
+  const onChangePasswordHandler = (ev) => {
+    setPassword(ev.target.value)
+  }
+  const onSignInHandler = () => {
+    setSignIn(true)
+  }
+  const onLogInHandler = () => {
+    setSignIn(false)
+  }
 
   const getDB = async () => {
     const { data: Account, error} = await supabase.from('Account').select()
@@ -19,6 +37,15 @@ export const AuthContextProvider = ( {children} ) => {
       console.log(error)
     }
   }
+  
+  useEffect(() => {
+    getDB()
+  }, [])
+
+  const logInHandler = () => {
+    setIsLoggedIn(true)
+  }
+
   const insertData = async (user) => {
     const {error} = await supabase.from('Account').insert(user)
     if (error) {
@@ -26,15 +53,17 @@ export const AuthContextProvider = ( {children} ) => {
     }
   }
 
-  const signInHandler = () => {
-    setSignIn(!signIn)
-  }
   return (
     <AuthContext.Provider
       value={{
         signIn,
         dataBase,
-        signInHandler,
+        userName,
+        password,
+        onChangePasswordHandler,
+        onChangeUserNameHandler,
+        onSignInHandler,
+        onLogInHandler,
         getDB,
         insertData
       }}

@@ -1,16 +1,18 @@
 import { useContext } from 'react'
 import { ApiContext } from '../contexts/ApiContext'
+import { AuthContext } from '../contexts/AuthContext'
 
 export const SignInForm = ({ onClick }) => {
-  const { onChangeUserNameHandler, onChangePasswordHandler, getAccountIdHandler, accountId } = useContext(ApiContext)
+  const { getAccountIdHandler, accountId } = useContext(ApiContext)
+  const { onChangeUserNameHandler, onChangePasswordHandler } =useContext(AuthContext)
   return (
-    <div className='flex flex-col gap-4' method='post'>
+    <div className='flex flex-col items-center gap-4'>
       <label htmlFor='userName'>Usuario</label>
-      <input onChange={onChangeUserNameHandler} type='text' name='userName' id='userName' />
+      <input className='w-2/3 rounded-lg' onChange={onChangeUserNameHandler} type='text' name='userName' id='userName' />
       <label htmlFor='password'>Contraseña</label>
-      <input onChange={onChangePasswordHandler} type='password' name='password' id='password' />
-      <button className={`${accountId === '' ? 'flex' : 'hidden'}`} onClick={getAccountIdHandler}>Generar ID</button>
-      <button className={`${accountId !== '' ? 'flex' : 'hidden'}`} onClick={onClick}type='submit'>Enviar</button>
+      <input className='w-2/3 rounded-lg' onChange={onChangePasswordHandler} type='password' name='password' id='password' />
+      <button className={`${accountId === '' ? 'flex' : 'hidden'} bg-slate-600 text-white font-bold p-2 rounded-lg border border-slate-300`} onClick={getAccountIdHandler}>Generar ID</button>
+      <button className={`${accountId !== '' ? 'flex' : 'hidden'} bg-slate-600 text-white font-bold p-2 rounded-lg border border-slate-300`} onClick={onClick}type='submit'>Enviar</button>
     </div>
   )
 }

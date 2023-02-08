@@ -38,11 +38,7 @@ export const ApiContextProvider = ({ children }) => {
   const [isScrolled, setIsScrolled] = useState('')
   const [requestToken, setRequestToken] = useState('')
   const [tokenApproved, setTokenApproved] = useState(false)
-  const [accountId, setAccountId] = useState('')
-  const [accessToken, setAccessToken] = useState('')
-  const [userName, setUserName] = useState('')
-  const [password, setPassword] = useState('')
-  const {getDB, dataBase, insertData} = useContext(AuthContext)
+  const {getDB, dataBase, insertData, userName, password, accessToken, setAccessToken, accountId, setAccountId} = useContext(AuthContext)
 
   
   const API_KEY = 'api_key=ec755b7b2f3cf064edd7cd1219ddcf08'
@@ -77,7 +73,6 @@ export const ApiContextProvider = ({ children }) => {
       body: JSON.stringify(data)
     }
   }
-
   
   useEffect(() => {
     const getRequestToken = window.localStorage.getItem('requestToken')
@@ -109,13 +104,6 @@ export const ApiContextProvider = ({ children }) => {
       })
       .catch(error => console.log(error))
     }
-  }
-
-  const onChangeUserNameHandler = (ev) => {
-    setUserName(ev.target.value)
-  }
-  const onChangePasswordHandler = (ev) => {
-    setPassword(ev.target.value)
   }
 
   const onSubmitGetAccountIdHandler = () => {

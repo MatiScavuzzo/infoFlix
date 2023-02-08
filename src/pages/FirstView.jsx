@@ -2,10 +2,12 @@ import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import Button from '../components/Button'
 import { ApiContext } from '../contexts/ApiContext'
+import { AuthContext } from '../contexts/AuthContext'
 import { ThemeContext } from '../contexts/ThemeContext'
 
 export const FirstView = () => {
   const { APPROVE_TOKEN } = useContext(ApiContext)
+  const { onLogInHandler, onSignInHandler } = useContext(AuthContext)
   const { darkMode } = useContext(ThemeContext)
   return (
     <div
@@ -29,6 +31,7 @@ export const FirstView = () => {
                   crear listas de lo que ya has visto o quisieras ver, puntuar
                   pelis o series, o bien encontrar qué ver en tus servicios de
                   streaming preferidos, hacé click{' '}
+                  <button onClick={onSignInHandler}>
                   <a
                     className='border border-red-600 font-semibold p-1 rounded-lg'
                     href={APPROVE_TOKEN}
@@ -36,7 +39,8 @@ export const FirstView = () => {
                     rel='noopener noreferrer'
                   >
                     acá
-                  </a>{' '}
+                  </a>
+                  </button>{' '}
                   para registrarte o acceder en TMDb (The Movie Database). Una
                   vez logueado autorizás a InfoFlix y automáticamente volvés a
                   la app, donde te vamos a pedir crear un nombre de usuario para que puedas acceder
@@ -48,7 +52,7 @@ export const FirstView = () => {
                 </article>
               </li>
               <li className='text-left'>
-                Si ya tienes cuenta, haz click <Link className='border border-red-600 font-semibold p-1 rounded-lg' to={'/auth'}>aquí</Link> para iniciar sesión
+                Si ya tienes cuenta, haz click <button onClick={onLogInHandler}><Link className='border border-red-600 font-semibold p-1 rounded-lg' to={'/auth'}>aquí</Link></button> para iniciar sesión
               </li>
               <li>
                 <article className='text-left'>
