@@ -38,7 +38,19 @@ export const ApiContextProvider = ({ children }) => {
   const [isScrolled, setIsScrolled] = useState('')
   const [requestToken, setRequestToken] = useState('')
   const [tokenApproved, setTokenApproved] = useState(false)
-  const {getDB, dataBase, insertData, userName, password, accessToken, setAccessToken, accountId, setAccountId} = useContext(AuthContext)
+  const [lists, setLists] = useState([])
+  const {
+    getDB, 
+    dataBase, 
+    insertData, 
+    userName, 
+    password, 
+    accessToken, 
+    setAccessToken, 
+    accountId, 
+    setAccountId, 
+    setSignIn,
+    isLoggedIn} = useContext(AuthContext)
 
   
   const API_KEY = 'api_key=ec755b7b2f3cf064edd7cd1219ddcf08'
@@ -54,6 +66,7 @@ export const ApiContextProvider = ({ children }) => {
   const REQUEST_TOKEN = `${API_URL}auth/request_token`
   const AUTH_TOKEN = `${API_URL}auth/access_token`
   const APPROVE_TOKEN = `https://www.themoviedb.org/auth/access?request_token=${requestToken}`
+  const GET_LISTS = `${API_URL}account/${accountId}/lists?${API_KEY}`
   const GET_METHOD_REQUEST = {
     method: 'GET',
     mode: 'cors',
@@ -73,6 +86,34 @@ export const ApiContextProvider = ({ children }) => {
       body: JSON.stringify(data)
     }
   }
+  const GET_METHOD_REQUEST_ISLOGGED = {
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+      'Content-type': 'application/json;charset=utf-8',
+      authorization: `Bearer ${accessToken}`
+    }
+  }
+
+  const postMethodRequestIsLoggedIn = (data) => {
+    return {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-type': 'application/json;charset=utf-8',
+        authorization: `Bearer ${accessToken}`
+      },
+      body: JSON.stringify(data)
+    }
+  }
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetch(GET_LISTS, GET_METHOD_REQUEST)
+      .then(res => res.json())
+      .then(resLists => console.log(resLists))
+    }
+  }, [isLoggedIn])
   
   useEffect(() => {
     const getRequestToken = window.localStorage.getItem('requestToken')
@@ -120,12 +161,14 @@ export const ApiContextProvider = ({ children }) => {
           alert('Debe completar todos los campos para enviarlos')
         } else {
           insertData(user)
+          setSignIn(false)
         }
       } else if (dataBase.some(user => user.username === userName)) {
         alert('Ya tenemos un usuario registrado con ese nombre, elige otro por favor')
         return
       } else {
         insertData(user)
+        setSignIn(false)
       }
     }
   }
@@ -333,7 +376,6 @@ export const ApiContextProvider = ({ children }) => {
         isScrolled,
         requestToken,
         tokenApproved,
-        accountId,
         dayOrWeekHandler,
         showMoreMoviesHandler,
         showLessMoviesHandler,

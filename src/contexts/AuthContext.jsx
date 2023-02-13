@@ -14,12 +14,18 @@ export const AuthContextProvider = ( {children} ) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
-  const [userAccount, setUserAccount] = useState([])
+  const [userAccount, setUserAccount] = useState()
   const [accountId, setAccountId] = useState('')
   const [accessToken, setAccessToken] = useState('')
+  const [validUsername, setValidUsername] = useState(false)
 
   const onChangeUserNameHandler = (ev) => {
-    setUserName(ev.target.value)
+    if (ev.target.value.length === 10 && /[A-Z]/.test(ev.target.value)) {
+      setValidUsername(true)
+      setUserName(ev.target.value)
+    } else {
+      setValidUsername(false)
+    }
   }
   const onChangePasswordHandler = (ev) => {
     setPassword(ev.target.value)
@@ -45,23 +51,38 @@ export const AuthContextProvider = ( {children} ) => {
 
   const getUserDB = async (username) => {
     const { data , error } = await supabase.from('Account').select().eq('username', username)
-    console.log(data)
+    if (data) {
+      setUserAccount(data)
+    }
     if (error) {
       console.log(error)
     }
-    return setUserAccount(data)
+    
   }
 
   useEffect(() => {
-    getUserDB(userName)
-  }, [userName])
+    if (validUsername === true) {
+      getUserDB(userName)
+    }
+  }, [validUsername])
 
   useEffect(() => {
-    console.log(userAccount)
-  }, [userAccount])
+    if (userAccount !== undefined) {
+      if (userAccount[0].password === password) {
+        setIsLoggedIn(true)
+      } else {
+        setIsLoggedIn(false)
+      }
+    }
+  }, [password, userAccount])
 
   const logInHandler = () => {
-    setIsLoggedIn(true)
+    if (!isLoggedIn) {
+      alert('Verifique los datos ingresados')
+    } else {
+      setAccessToken(userAccount[0].access_token)
+      setAccountId(userAccount[0].account_id)
+    }
   }
 
   const insertData = async (user) => {
@@ -78,6 +99,14 @@ export const AuthContextProvider = ( {children} ) => {
         dataBase,
         userName,
         password,
+        validUsername,
+        accountId,
+        accessToken,
+        isLoggedIn,
+        logInHandler,
+        setAccessToken,
+        setSignIn,
+        setAccountId,
         onChangePasswordHandler,
         onChangeUserNameHandler,
         onSignInHandler,
