@@ -39,6 +39,7 @@ export const ApiContextProvider = ({ children }) => {
   const [requestToken, setRequestToken] = useState('')
   const [tokenApproved, setTokenApproved] = useState(false)
   const [lists, setLists] = useState([])
+  const [idFavList, setIdFavList] = useState('')
   const {
     getDB, 
     dataBase, 
@@ -66,7 +67,8 @@ export const ApiContextProvider = ({ children }) => {
   const REQUEST_TOKEN = `${API_URL}auth/request_token`
   const AUTH_TOKEN = `${API_URL}auth/access_token`
   const APPROVE_TOKEN = `https://www.themoviedb.org/auth/access?request_token=${requestToken}`
-  const GET_LISTS = `${API_URL}account/${accountId}/lists?${API_KEY}`
+  const GET_LISTS = `${API_URL}account/${accountId}/lists`
+  const POST_LIST = `${API_URL}list`
   const GET_METHOD_REQUEST = {
     method: 'GET',
     mode: 'cors',
@@ -108,12 +110,26 @@ export const ApiContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    if (isLoggedIn) {
-      fetch(GET_LISTS, GET_METHOD_REQUEST)
+    if (accessToken !== '') {
+      fetch(GET_LISTS, GET_METHOD_REQUEST_ISLOGGED)
       .then(res => res.json())
-      .then(resLists => console.log(resLists))
+      .then(resLists => setLists(resLists))
     }
-  }, [isLoggedIn])
+  }, [accessToken])
+
+  useEffect(() => {
+    const favoriteList = {
+      name: 'Favoritos',
+      iso_639_1: 'es',
+      description: 'Lista de mis favoritos',
+      public: false
+    }
+    if (lists === []) {
+      fetch(POST_LIST, postMethodRequestIsLoggedIn(favoriteList))
+      .then(res => res.json())
+      .then(resFavList => console.log(resFavList.id))
+    }
+  }, [accessToken])
   
   useEffect(() => {
     const getRequestToken = window.localStorage.getItem('requestToken')

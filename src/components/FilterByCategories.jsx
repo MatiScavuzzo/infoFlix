@@ -19,7 +19,7 @@ export const FilterByCategories = ({className, genresList, onChange}) => {
         <h3 className='p-1'>Categorías</h3>
         {showGenres === false ? <HiOutlineChevronDown /> : <HiOutlineX/>}</button>
       </div>
-      <div className={`${showGenres === false ? 'hidden' : ''} ${darkMode ? 'bg-black border-2 border-slate-300' : 'bg-red-700 border-2 border-neutral-700 text-neutral-100 opacity-95'} w-full rounded-lg scroll-m-1 top-14 p-1 left-0 h-40 overflow-auto absolute`}>
+      <div className={`${showGenres === false ? 'hidden' : ''} ${darkMode ? 'bg-black border-2 border-slate-300' : 'bg-red-700 border-2 border-neutral-700 text-neutral-100 opacity-95'} w-full rounded-lg scroll-m-1 top-14 p-1 left-0 h-40 overflow-auto absolute z-20`}>
         <DropdownGenres className='flex flex-col w-full items-start justify-start rounded-lg p-1'>
           {!genresList ? (
             <Spinner />
