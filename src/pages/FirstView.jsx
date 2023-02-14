@@ -13,7 +13,7 @@ export const FirstView = () => {
     <div
       className={`${
         darkMode ? 'dark' : 'light'
-      } h-screen flex flex-col items-center justify-start p-2`}
+      } h-full flex flex-col items-center justify-start p-2`}
     >
       <main className='flex flex-col items-center justify-center gap-4'>
         <h1 className='text-red-600 font-extrabold'>Gracias por estar acá</h1>

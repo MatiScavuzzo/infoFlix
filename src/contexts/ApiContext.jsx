@@ -113,7 +113,10 @@ export const ApiContextProvider = ({ children }) => {
     if (accessToken !== '') {
       fetch(GET_LISTS, GET_METHOD_REQUEST_ISLOGGED)
       .then(res => res.json())
-      .then(resLists => setLists(resLists))
+      .then(resLists => {
+        setLists(resLists.results)
+        console.log(resLists.results)
+      })
     }
   }, [accessToken])
 
@@ -127,9 +130,9 @@ export const ApiContextProvider = ({ children }) => {
     if (lists === []) {
       fetch(POST_LIST, postMethodRequestIsLoggedIn(favoriteList))
       .then(res => res.json())
-      .then(resFavList => console.log(resFavList.id))
+      .then(resFavList => console.log(resFavList))
     }
-  }, [accessToken])
+  }, [lists])
   
   useEffect(() => {
     const getRequestToken = window.localStorage.getItem('requestToken')
